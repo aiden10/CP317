@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="dashboard.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+    <div id="nav-container">
+        <svg viewBox="0 0 100 80" width="40" height="40" onclick="showLeftPanel()" id="hamburger-button">
+            <rect width="100" height="20" ></rect>
+            <rect y="30" width="100" height="20"></rect>
+            <rect y="60" width="100" height="20"></rect>
+          </svg>
+    </div>
+    <div id="left-panel">
+        <span class="left-panel-header">Analytics</span>
+        <div class="left-panel-button">
+            <img src="assets/Dollar_Sign.svg.png" alt="Dollar_Sign" width="25vh" height="25vh">
+            Sales
+        </div>
+        <div class="left-panel-button">
+            <img src="assets/revenue.png" alt="Revenue" width="25vh" height="25vh">
+            Revenue
+        </div>
+        <span class="left-panel-header">Management</span>
+        <div class="left-panel-button">
+            <img src="assets/employees.png" alt="Employees" width="25vh" height="25vh">
+            Employees
+        </div>
+        <div class="left-panel-button">
+            <img src="assets/inventory.png" alt="Inventory" width="25vh" height="25vh">
+            Inventory
+        </div>
+        <span class="left-panel-header">Orders</span>
+        <div class="left-panel-button">
+            <img src="assets/warehouse.png" alt="Warehouse" width="30vh" height="35vh">
+            Warehouse
+        </div>
+        <div class="left-panel-button">
+            <img src="assets/clipboard.png" alt="Order" width="25vh" height="25vh">
+            Order
+        </div>
+    </div>
+    <div id="insights-panel">
+        Your current monthly revenue is 40% higher than last month's
+    </div>
+    <div id="updates-container">
+        <span>Updates</span>
+        <div id="updates-list">
+            <span>Order no. 1248 shipped</span>
+            <span>Order no. 695 filled</span>
+            <span>Order no. 1421 placed</span>
+            <span>Employee "Ben Smith"...</span>
+            <span>Order no. 1230 failed</span>
+            <span>Employee "Mike" hired</span>
+        </div>
+    </div>
+    <div id="chart-container">
+        <span>Weekly Revenue</span>
+        <img src="assets/chart.png" alt="Revenue-Chart" width="650vh" height="325vh">
+    </div>
+    <div id="income-container">
+        <div class="income-panel">
+            <span>$328K Total Monthly Income</span>
+        </div>
+        <div class="income-panel">
+            <span>$55K Net Monthly Income</span>
+        </div>
+    </div>
+</body>
+</html>

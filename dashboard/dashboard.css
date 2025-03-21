@@ -1,0 +1,160 @@
+
+:root {
+    background-color: #3d3d3d;
+}
+
+#nav-container {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    height: 6vh;
+    flex-direction: row;
+    background-color: #f3f3f3;
+    padding: 1vh;
+    z-index: 10;
+}
+
+#hamburger-button:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+#left-panel {
+    margin-left: 1.1vh;
+    position: fixed;
+    left: -200px;
+    top: 9vh;
+    display: flex;
+    transition: left 0.5s ease-out;
+    flex-direction: column;
+    background-color: #f3f3f3;
+    padding-top: 2vh;
+    row-gap: 4vh;
+    height: 100vh;
+    width: 25vh;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#left-panel.open {
+    left: 0;
+}
+
+.left-panel-header {
+    font-size: x-large;
+    text-align: center;
+}
+
+.left-panel-button {
+    box-shadow: 1px 1px 1px 1px black;
+    margin-right: 2vh;
+    margin-left: 2vh;
+    min-height: 5vh;
+    padding-left: 3vh;
+    font-size: 16px;
+    border-radius: 5px;
+}
+.left-panel-button:hover {
+    opacity: 0.8;
+    background-color: #cdc7c7;
+    cursor: pointer;
+}
+
+#insights-panel {
+    position: fixed;
+    left: 35vh;
+    top: 20vh;
+    height: 10vh;
+    width: 50vh;
+    padding: 5vh;
+    background-color: #f3f3f3;
+    text-wrap: wrap;
+    text-align: center;
+    font-size: 24px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 2px 2px black;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#insights-panel:hover {
+    box-shadow: 5px 5px 5px 5px black;
+    background-color: #f8f8f8;
+    opacity: 0.9;
+}
+
+#updates-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 35vh;
+    top: 55vh;
+    width: 50vh;
+    row-gap: 5vh;
+}
+#updates-container span {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#updates-list {
+    width: 100%;
+    height: 30vh;
+    background-color: #f3f3f3;
+    box-shadow: 2px 2px 2px 2px black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    align-items: start;
+    padding-bottom: 1vh;
+}
+#updates-list:hover {
+    opacity: 0.9;
+    box-shadow: 5px 5px 5px 5px black;
+}
+#updates-list span {
+    font-size: 22px;
+    color: black;
+    padding-left: 3vh;
+    padding-top: 3vh;
+}
+
+#chart-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    right: 15vh;
+    top: 43vh;
+    row-gap: 4vh;
+    align-items: center;
+}
+#chart-container span {
+    font-size: 36px;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#income-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    right: 45vh;
+    top: 15vh;
+    row-gap: 4vh;
+}
+
+.income-panel {
+    background-color: #f3f3f3;
+    box-shadow: 2px 2px 2px 2px black;
+    padding: 3vh;
+    border-radius: 10px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.income-panel:hover {
+    opacity: 0.8;
+    box-shadow: 4px 4px 4px 4px black;
+}
+.income-panel span {
+    color: green;
+    font-weight: bold;
+    text-shadow: 1px 1px greenyellow;
+}
