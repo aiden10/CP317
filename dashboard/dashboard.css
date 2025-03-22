@@ -1,6 +1,7 @@
 
 :root {
     background-color: #3d3d3d;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 #nav-container {
@@ -19,6 +20,13 @@
     opacity: 0.6;
 }
 
+#search-bar {
+    margin-left: 27vh;
+    width: 80vh;
+    background-color: #414141;
+    color: white;
+}
+
 #left-panel {
     margin-left: 1.1vh;
     position: fixed;
@@ -32,7 +40,6 @@
     row-gap: 4vh;
     height: 100vh;
     width: 25vh;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 #left-panel.open {
     left: 0;
@@ -71,7 +78,6 @@
     font-size: 24px;
     border-radius: 15px;
     box-shadow: 2px 2px 2px 2px black;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 #insights-panel:hover {
     box-shadow: 5px 5px 5px 5px black;
@@ -92,7 +98,6 @@
     font-size: 36px;
     text-align: center;
     color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 #updates-list {
@@ -130,7 +135,6 @@
 #chart-container span {
     font-size: 36px;
     color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 #income-container {
@@ -147,7 +151,6 @@
     box-shadow: 2px 2px 2px 2px black;
     padding: 3vh;
     border-radius: 10px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .income-panel:hover {
     opacity: 0.8;
