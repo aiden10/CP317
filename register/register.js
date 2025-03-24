@@ -1,5 +1,5 @@
 
-// Make the login form call loginUser when submit is pressed
+// Make the login form call registerUser when submit is pressed
 document.addEventListener("DOMContentLoaded", function () {
     const registerForm = document.getElementById("register-form");
 
@@ -28,7 +28,7 @@ function registerUser(email, password, privilege) {
     fetch("http://localhost:8000/api/register", { // [CHANGE] update this to the port the server will be hosted on, or the actual address if we host the backend online
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, privilege })
     })
     .then(response => response.json())
     .then(data => {
