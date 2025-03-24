@@ -1,0 +1,52 @@
+
+:root {
+    background-color: #3d3d3d;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#message-label {
+    display: none;
+}
+
+#register-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 3vh;
+    height: 100vh;
+}
+
+#register-container h1 {
+    color: white;
+}
+
+#register-form label {
+    color: white;
+}
+
+#privilege-menu {
+    font-size: 16px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.text-field {
+    width: 50vh;
+    height: 5vh;
+    border-radius: 5px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#register-button {
+    width: 51vh;
+    font-size: large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+a {
+    color: white;
+}
+a:hover {
+    color: #d0cdcd;
+    transition: color 500ms linear;
+}
