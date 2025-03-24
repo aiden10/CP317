@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function registerUser(email, password, privilege) {
     /*
-    Paramters:
+    Parameters:
         - email: the email address from the login form
         - password: the password from the login form
         - privilege: the privilege value from the login form

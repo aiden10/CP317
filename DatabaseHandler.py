@@ -114,27 +114,28 @@ class DatabaseHandler:
         
         return results
     
-    def update(self, new_data, condition, table: str, column_name: str) -> bool: 
+    def update(self, new_data: tuple, condition: tuple, table: str, set_column: str, where_column: str) -> bool: 
         """
         Parameters: 
             - new_data: the variable containing the new data
             - condition: the variable containing the data which will be checked 
             - table: the name of the table which will be searched
-            - column_name: the name of the column potentially containing the condition
+            - set_column: the name of the column whose values will be modified
+            - where_column: the name of the column which is checked for matching the condition
         Returns:
             - a bool indicating whether the table was updated or not
 
         Usage:
-            result = db_handler.update(100, 50, "table_name", "count")
-            if result:
-                ...
+            result = db_handler.update((new_quantity), item_name, "inventory", "quantity", "item_name") 
+            Read as: UPDATE inventory SET quantity = new_quantity WHERE item_name = item_name
+            
         Updates column values to new_data where the existing column value matches condition
         """
-        sql_statement = f"UPDATE {table} SET {column_name} = %s WHERE {column_name} = %s"
+        sql_statement = f"UPDATE {table} SET {set_column} = %s WHERE {where_column} = %s"
         self.cursor.execute(sql_statement, (new_data, condition))
         self.database.commit()
         if self.cursor.rowcount <= 0:
-            self.logger.write_log(f"Failed to update: {column_name} to {new_data} WHERE {column_name} = {condition}")
+            self.logger.write_log(f"Failed to update: {set_column} to {new_data} WHERE {where_column} = {condition}")
             return False
         
         return True

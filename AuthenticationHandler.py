@@ -23,9 +23,9 @@ class AuthenticationHandler:
 
     def generate_token(self) -> str:
         """
-        Returns a random 64 character string consisting of uppercase letters and digits
+        Returns a random 512 character string consisting of letters and digits
         """
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=64)) 
+        return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=512)) 
 
     def is_valid_user(self, session_token: str) -> bool:
         """

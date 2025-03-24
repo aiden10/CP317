@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function loginUser(email, password) {
     /*
-    Paramters:
+    Parameters:
         - email: the email address from the login form
         - password: the password from the login form
     Sends a POST request containing email and password to server. Redirects to dashboard and stores session token in cookies on successful request. 

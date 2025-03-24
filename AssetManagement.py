@@ -16,5 +16,5 @@ class AssetManagement:
         self.db_handler = DatabaseHandler()
         self.logger = Logger("AssetManagement")
 
-    def get_assets(self, email: str, password: str) -> list:
-        return self.db_handler.fetch_row((email, password), "assets")
+    def get_assets(self, email: str) -> list:
+        return self.db_handler.fetch_row((email), "assets", "owner_email")

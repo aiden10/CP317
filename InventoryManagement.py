@@ -20,12 +20,10 @@ class InventoryManagement:
         self.db_handler.fetch_table("inventory")
 
     def order_inventory(self, item_name: str, quantity: int) -> None:
-        if self.db_handler.contains(item_name, "inventory"):
-            
-            # These two lines wouldn't really work which is why the update function needs to be modified once we know what database we're using
-            prev_quantity = self.db_handler.fetch_row(item_name, "inventory")
-            self.db_handler.update(item_name, prev_quantity + quantity, "inventory")
-            
+        if len(self.db_handler.fetch((item_name), "inventory", "item_name")) > 0:            
+            # Needing to access specific column values by index isn't really great and requires referencing the tables.sql file
+            prev_quantity = self.db_handler.fetch((item_name), "inventory", "item_name")[0][3] # Access the first row's third column (quantity)
+            self.db_handler.update((prev_quantity + quantity), item_name, "inventory", "quantity", "item_name")
             return
         
         self.db_handler.insert((item_name, quantity), "inventory")

@@ -20,6 +20,3 @@ class EmployeeManagement:
     def get_employees(self) -> list:
         return self.db_handler.fetch_table("employees")
             
-    # Not sure how this would work because I don't know what options there are to update employees
-    def update_employee(self) -> list:
-        ...
