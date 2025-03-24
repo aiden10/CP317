@@ -9,6 +9,7 @@ Called From:
 
 
 from RequestHandler import RequestHandler
+from Logger import Logger
 
 """
 This file should be the one which contains the server endpoints and calls the respective RequestHandler functions for each one.
@@ -23,3 +24,4 @@ We should also have endpoints for each of the following pages:
 class Server:
     def __init__(self):
         self.request_handler = RequestHandler()
+        self.logger = Logger("Server")

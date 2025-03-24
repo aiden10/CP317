@@ -14,7 +14,7 @@ from Logger import Logger
 class InventoryManagement:
     def __init__(self):
         self.db_handler = DatabaseHandler()
-        self.logger = Logger()
+        self.logger = Logger("InventoryManagement")
 
     def get_inventory(self) -> list:
         self.db_handler.fetch_table("inventory")
