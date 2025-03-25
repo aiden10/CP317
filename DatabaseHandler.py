@@ -135,7 +135,7 @@ class DatabaseHandler:
         """
         try:
             with app.app_context():
-                matches = db.session.query(table).filter_by(**condition).first() # double asterisks for unpacking dictionary
+                matches = db.session.query(table).filter_by(**condition).all() # double asterisks for unpacking dictionary
                 self.logger.write_log("Row fetched successfully.")
                 return matches
         except Exception as e:
