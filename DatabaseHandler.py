@@ -14,26 +14,41 @@ Called From:
 The delete, fetch, and update functions may need to be updated to support greater than or less than conditions
 """
 from Logger import Logger
-from Server import app, db
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy        
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///finance.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+db = SQLAlchemy()
+db.init_app(app)
 
 # Class to handle database operations
 class DatabaseHandler:
     def __init__(self):
         self.logger = Logger("DatabaseHandler")
 
-    def contains(self, table, condition):
+    def create_tables(self) -> None:
+        with app.app_context():
+            db.create_all()
+
+    def drop_all(self) -> None:
         """
-        Parameters:  
-            - table: the model class representing the table to search in  
-            - condition: a dictionary containing the attributes and their values to check for existence  
+        Clears the database
+        """
+        db.drop_all()
 
-        Returns:  
-            - a bool indicating whether at least one matching record exists  
-
-        Usage:  
-            result = db_handler.contains(ModelName, {"column1": value1, "column2": value2})  
-
+    def contains(self, table, condition) -> bool:
+        """
         Checks if at least one record matches the given condition  
+
+        Usage: result = db_handler.contains(ModelName, {"column1": value1, "column2": value2})  
+        
+        :param table: the model class representing the table to search in  
+        :param condition: a dictionary containing the attributes and their values to check for existence  
+
+        :return bool: indicating whether at least one matching record exists  
         """
         try:
             with app.app_context():
@@ -44,17 +59,15 @@ class DatabaseHandler:
             return False
 
 
-    def insert(self, record):
+    def insert(self, record) -> bool:
         """
-        Parameters: 
-            - record: the object containing the data to be inserted
-        Returns:
-            - a bool indicating whether the insertion was successful or not
-
-        Usage:
-            result = db_handler.insert(model(attr1 = data1, attr2 = data2, attr3 = data3, ...))
-            
         Inserts a row into a table
+
+        Usage: result = db_handler.insert(model(attr1 = data1, attr2 = data2, attr3 = data3, ...))
+        
+        :param record: the object containing the data to be inserted
+        
+        :return bool: indicating whether the insertion was successful or not
         """
         try:
             with app.app_context():
@@ -66,17 +79,16 @@ class DatabaseHandler:
             self.logger.write_log(f"Insert failed: {e}")
             return False
 
-    def delete(self, table, condition):
+    def delete(self, table, condition) -> bool:
         """
-        Parameters: 
-            - table: the model/table where the data will be deleted
-            - condition: the dict containing the data which will be checked 
-        Returns:
-            - a bool indicating whether the deletion was successful or not
-
-        Usage:
-            result = db_handler.delete(model, {attr:value})
         Deletes any row(s) from a table matching the condition
+        
+        Usage: result = db_handler.delete(model, {attr:value})
+        
+        :param table: the model/table where the data will be deleted
+        :param condition: the dict containing the data which will be checked 
+
+        :return bool: indicating whether the deletion was successful or not
         """
         deleted = False
         try:
@@ -92,19 +104,17 @@ class DatabaseHandler:
             self.logger.write_log(f"Delete failed: {e}")
         return deleted
 
-    def update(self, table, condition, updates):
-        """
-        Parameters: 
-            - table: the model/table which will be searched
-            - condition: the dict containing the data which will be checked
-            - updates: the dict containing the new column, data pair
-        Returns:
-            - a bool indicating whether the table was updated or not
-
-        Usage:
-            result = db_handler.update(model, {condition_attr: val}, {update_attr: val})
-            
-       Updates first record matching the condition with new values
+    def update(self, table, condition, updates) -> bool:
+        """ 
+        Updates first record matching the condition with new values
+        
+        Usage: result = db_handler.update(model, {condition_attr: val}, {update_attr: val})
+        
+        :param table: the model/table which will be searched
+        :param condition: the dict containing the data which will be checked
+        :param updates: the dict containing the new column, data pair
+        
+        :return bool: indicating whether the table was updated or not
        """
         try:
             with app.app_context():
@@ -121,183 +131,66 @@ class DatabaseHandler:
             self.logger.write_log(f"Update failed: {e}")
             return False
 
-    def fetch(self, table, condition):
+    def fetch(self, table, condition) -> dict:
         """
-        Parameters:  
-            - table: the model/table which will be searched
-            - condition: the tuple containing the data which will be checked
-        Returns:
-            - matches: any object matching condition
+        Returns the rows matching the condition
 
-        Usage:
-            result = db_handler.fetch(model, {attr:value})
-        Returns all records matching the condition
+        Usage: result = db_handler.fetch(model, {attr:value})
+
+        :param table: the model/table which will be searched
+        :param condition: the tuple containing the data which will be checked
+
+        :return matches: any object matching condition
         """
         try:
             with app.app_context():
-                matches = db.session.query(table).filter_by(**condition).first() # double asterisks for unpacking dictionary
+                matches = db.session.query(table).filter_by(**condition).all() # double asterisks for unpacking dictionary
                 self.logger.write_log("Row fetched successfully.")
-                return matches
+                return self._retrieve_data(matches)
         except Exception as e:
             self.logger.write_log(f"Row fetch failed: {e}")
             return None
 
-    def fetch_table(self, table):
+    def fetch_table(self, table) -> list[dict]:
         """
-        Parameters: 
-            - table: the model/table to retrieve data from
-        Returns:
-            - a list of all the objects/rows in the table
-
-        Usage:
-            results = db_handler.fetch_table(model)
-
         Returns a list of all objects from the table
+
+        Usage: results = db_handler.fetch_table(model)
+
+        :param table: the model/table to retrieve data from
+        :return results: list of all the objects/rows in the table
         """
         try:
             with app.app_context():
                 self.logger.write_log("Table fetched successfully.")
-                return db.session.query(table).all()
+                return self._retrieve_data(db.session.query(table).all())
+            
         except Exception as e:
             self.logger.write_log(f"Table fetch failed: {e}")
             return None
-#old code
-#---------------------------
-# import mysql.connector
 
-# class DatabaseHandler:
-#     def __init__(self):
-#         self.database = mysql.connector.connect(
-#             host = "localhost", # [CHANGE] Change this string to host of the database we are using 
-#             user = "username", # [CHANGE] Change this string to username database is using
-#             password = "password", # [CHANGE] Change this string to password database is using
-#             database = "database" # [CHANGE] Change this string to the name of the database we are using
-#         )
-#         self.logger = Logger("DatabaseHandler")
-#         self.cursor = self.database.cursor()
+    def _retrieve_data(self, matches):
+        """
+        Private function to convert retrieved matches to a more convenient format
+
+        :param matches: list of Table objects
+
+        :return values: list of dict or single dict containing table properties and values.
+        """
+
+        values = []
+        if matches:
+            for match in matches:
+                entry = {}
+                properties = match.__dict__.keys()
+                for property in properties:
+                    if property == '_sa_instance_state':
+                        continue
+                    entry.update({property: match.__dict__[property]})
+                
+                values.append(entry)
         
-#     def insert(self, data: tuple, table: str, column_names: list[str]) -> bool:
-#         """
-#         Parameters: 
-#             - data: the tuple containing the data to be inserted
-#             - table: the name of the table where the data will be inserted
-#             - column_names: the names of the columns where the data will be inserted
-#         Returns:
-#             - a bool indicating whether the insertion was successful or not
-
-#         Usage:
-#             result = db_handler.insert((data1, data2, data3), "sample_table", ["column1", "column2", "column3"])
-#             if result:
-#                 ...
-#         Inserts a row into a table
-#         """
-#         assert len(column_names) == len(data), "data must contain the same amount of elements as column names"
-
-#         # Insert rows into database
-#         sql_statement = f"INSERT INTO {table} ({', '.join(column_names)}) VALUES {', '.join(['%s'] * len(column_names))}"
-#         self.cursor.execute(sql_statement, data)
-#         self.database.commit(); # Commit / apply changes to database
+        if len(values) == 1:
+            return values[0]
         
-#         # Return False if no rows were changed
-#         if self.cursor.rowcount <= 0:
-#             self.logger.write_log(f"Failed to insert: {data} into table: {table}")
-#             return False
-        
-#         return True
-    
-#     # Deletes specified data from the database
-#     def delete(self, condition: tuple, table: str, column_name: str) -> bool:
-#         """
-#         Parameters: 
-#             - condition: the tuple containing the data which will be checked 
-#             - table: the name of the table where the data will be deleted
-#             - column_name: the name of the column potentially containing the condition
-#         Returns:
-#             - a bool indicating whether the deletion was successful or not
-
-#         Usage:
-#             result = db_handler.delete((condition1), "sample_table", "condition1")
-#             if result:
-#                 ...
-#         Deletes row(s) from a table
-#         """
-
-#         sql_statement = f"DELETE FROM {table} WHERE {column_name} = %s"
-
-#         self.cursor.execute(sql_statement, condition)
-#         self.database.commit() # Commit / apply changes to database
-        
-#         # Return False if no rows were changed
-#         if self.cursor.rowcount <= 0:
-#             self.logger.write_log(f"Failed to delete rows matching {condition} into table: {table}")
-#             return False
-        
-#         return True
-
-#     def fetch(self, condition: tuple, table: str, column_name: str) -> list[tuple]:
-#         """
-#         Parameters: 
-#             - condition: the tuple containing the data which will be checked 
-#             - table: the name of the table which will be searched
-#             - column_name: the name of the column potentially containing the condition
-#         Returns:
-#             - the row(s) containing the data
-
-#         Usage:
-#             result = db_handler.fetch((condition1), "sample_table", "condition1")
-#             if result:
-#                 ...
-#         Returns all records matching the condition
-#         """
-
-#         sql_statement = f"SELECT * FROM {table} WHERE {column_name} = %s"
-#         self.cursor.execute(sql_statement, condition)
-#         results = self.cursor.fetchall() # Retrieves results of most recent query that has been executed (empty if no result)
-        
-#         if len(results) <= 0:
-#             self.logger.write_log(f"Found no rows matching condition: {column_name} = {condition}")
-#             return []
-        
-#         return results
-    
-#     def update(self, new_data: tuple, condition: tuple, table: str, set_column: str, where_column: str) -> bool: 
-#         """
-#         Parameters: 
-#             - new_data: the variable containing the new data
-#             - condition: the variable containing the data which will be checked 
-#             - table: the name of the table which will be searched
-#             - set_column: the name of the column whose values will be modified
-#             - where_column: the name of the column which is checked for matching the condition
-#         Returns:
-#             - a bool indicating whether the table was updated or not
-
-#         Usage:
-#             result = db_handler.update((new_quantity), item_name, "inventory", "quantity", "item_name") 
-#             Read as: UPDATE inventory SET quantity = new_quantity WHERE item_name = item_name
-            
-#         Updates column values to new_data where the existing column value matches condition
-#         """
-#         sql_statement = f"UPDATE {table} SET {set_column} = %s WHERE {where_column} = %s"
-#         self.cursor.execute(sql_statement, (new_data, condition))
-#         self.database.commit()
-#         if self.cursor.rowcount <= 0:
-#             self.logger.write_log(f"Failed to update: {set_column} to {new_data} WHERE {where_column} = {condition}")
-#             return False
-        
-#         return True
-
-#     def fetch_table(self, table: str) -> list[tuple]:
-#         """
-#         Parameters: 
-#             - table: the name of the table to retrieve data from
-#         Returns:
-#             - a list of all the rows in the table
-
-#         Usage:
-#             results = db_handler.fetch_table("table_name")
-
-#         Retrieves all rows from a table
-#         """
-#         sql_statement = f"SELECT * FROM {table}"
-#         self.cursor.execute(sql_statement)
-#         return self.cursor.fetchall()
+        return values

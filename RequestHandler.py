@@ -62,9 +62,9 @@ class RequestHandler:
         password = request_body["password"]
         session_token = self.auth_handler.login(email, password)
         if session_token != "":
-            return {"status_code": 200, "message": "Successfully registered", "session_token": session_token}
+            return {"status_code": 200, "message": "Successfully logged in", "session_token": session_token}
         
-        return {"status_code": 400, "message": "Failed to register", "session_token": ""}
+        return {"status_code": 400, "message": "Failed to login", "session_token": ""}
     
     def request_logout(self, cookies: dict) -> dict:
         """
@@ -88,6 +88,7 @@ class RequestHandler:
             - A dict containing the data that will the be sent back to the user from Server.py
         """
         session_token = cookies["session_token"]
+        self.logger.write_log(f"Resuting dashboard with: {session_token}")
         if self.auth_handler.is_valid_user(session_token):
             email = self.auth_handler.get_email()
             dashboard_contents = self.dashboard.summarize_reports(email)

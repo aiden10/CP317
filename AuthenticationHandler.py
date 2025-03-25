@@ -11,10 +11,12 @@ Client should only ever store session token locally in cookies.
 Email and password are only provided when logging in and registering. 
 """
 
+import bcrypt
 import random
 import string
 from Logger import Logger
 from DatabaseHandler import DatabaseHandler
+from Tables import Sessions, Accounts
 
 class AuthenticationHandler:
     def __init__(self):
@@ -23,87 +25,120 @@ class AuthenticationHandler:
 
     def generate_token(self) -> str:
         """
-        Returns a random 512 character string consisting of letters and digits
+        :return token: a random 512 character string consisting of letters and digits
         """
         return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=512)) 
 
     def is_valid_user(self, session_token: str) -> bool:
         """
-        Parameters:
-            - session_token: the token which corresponds to the user's session
-        Returns:
-            - True: if the token corresponds to an existing user who is currently authenticated
-            - False: if the token does not correspond to an authenticated user  
+        :param session_token: the token which corresponds to the user's session
+
+        :return bool: 
+            True: if the token corresponds to an existing user who is currently authenticated
+            False: if the token does not correspond to an authenticated user  
         """
-        if len(self.db_handler.fetch(session_token, "sessions", "session_token")) > 0:
+        if self.db_handler.contains(Sessions, {"session_token": session_token}):
             return True
         return False
     
     def register(self, email: str, password: str, privilege: str) -> str:
         """
-        Parameters:
-            - email: the email of the user to create an account for
-            - password: the user's password
-            - privilege: the user's privilege level (owner, employee, customer)
-        Returns:
-            - a session_token
+        :param email: the email of the user to create an account for
+        :param password: the user's password
+        :param privilege: the user's privilege level (owner, employee, customer)
+
+        :return session_token: random 512 character string consisting of letters and numbers
         """
+        password_bytes = password.encode('utf-8')
+        salt = bcrypt.gensalt()        
+        password_hash = bcrypt.hashpw(password_bytes, salt)
+        password_hash_str = password_hash.decode('utf-8')  # Convert bytes to string
         token = self.generate_token()
         
         # Store email and hashed password in accounts table
-        create_account = self.db_handler.insert((email, hash(password), privilege), "accounts", ["email", "password_hash", "privilege"])
-        create_session = self.db_handler.insert((token), "sessions", ["session_token"])
+        create_account = self.db_handler.insert(Accounts(email=email, password_hash=password_hash_str, privilege=privilege))
+        create_session = self.db_handler.insert(Sessions(session_token=token, email=email))
         if create_account and create_session:
+            self.logger.write_log(f"Created user: {email} with password: {password}") # Only including the password for debugging
             return token
         
         return ""
     
     def login(self, email: str, password: str) -> str:
         """
-        Parameters:
-            - email: the email of the user to check
-            - password: the user's password
-        Returns:
-            - a session_token
+        :param email: the email of the user to check
+        :param password: the user's password
+
+        :return session_token: new session token
         """
 
         # Get the account associated with the email
-        account = self.db_handler.fetch((email), "accounts", "email")
-
-        # Check the first result's hashed password against the provided one 
-        if account[0][1] == hash(password):
-            return self.generate_token()
+        account = self.db_handler.fetch(Accounts, {"email": email})
+        self.logger.write_log(f"Attempting to login user: {email} with password: {password}")
         
-        return ""
+        password_bytes = password.encode('utf-8')
+        stored_hash_str = account["password_hash"]
+        stored_hash_bytes = stored_hash_str.encode('utf-8')
+        
+        # Verify login information
+        if bcrypt.checkpw(password_bytes, stored_hash_bytes):
+            token = self.generate_token()
+            # Update Sessions table
+            insert_result = self.db_handler.insert(Sessions(session_token=token, email=email))
+            if insert_result:
+                self.logger.write_log(f"Logged in user: {email}")
+                return token
+            else:
+                self.logger.write_log(f"Error adding session_token: {token} and email: {email}")
+                return ""
+        else:
+            self.logger.write_log(f"Invalid password: {hash(password)} != {account['password_hash']}")
+            return ""
     
     def logout(self, session_token: str) -> bool:
         """
-        Parameters:
-            - session_token: the session token of the user to remove
-        Returns:
-            - True: if the token exists and was successfully removed
-            - False if the token does not exist or something else happened preventing the removal of it
+        :param session_token: the session token of the user to remove
+        
+        :return 
+        - True if the token exists and was successfully removed
+        - False if the token does not exist or something else happened preventing the removal of it
         """
         # if session token exists
-        if len(self.db_handler.fetch(session_token, "sessions", "session_token")) > 0:
-            return self.db_handler.delete(session_token, "sessions", "session_token") # return the delete result
+        if self.db_handler.contains(Sessions, {"session_token": session_token}):
+            return self.db_handler.delete(Sessions, {"session_token": session_token}) # return the delete result
         
         return False
     
     def get_email(self, session_token: str) -> str:
         """
-        Parameters:
-            - session_token: the session token of the user whose email we want to find
-        Returns:
-            - the email of the user
-            - empty string if the token does not match any records
-        
         Gets the email of a user by their session token
+
+        :param session_token: the session token of the user whose email we want to find
+
+        :return email: the email of the user or an empty string if session doesn't exist
         """
-        session_rows = self.db_handler.fetch(session_token, "sessions", "session_token")
-        if len(session_rows) > 0:
-            return session_rows[0][1] # Assuming that email is the second column
+        session_row = self.db_handler.fetch(Sessions, {"session_token": session_token})
+        if session_row:
+            return session_row["email"]
         
         return ""
     
-    
+    def get_privilege(self, session_token: str) -> str:
+        """
+        Gets the privilege of a user by their session token
+        Privileges: "owner", "employee", "customer"
+        :param session_token: the session token of the user whose email we want to find
+
+        :return privilege: the privilege of the user or an empty string if session doesn't exist
+        """
+        session_row = self.db_handler.fetch(Sessions, {"session_token": session_token})
+        if not session_row:
+            return ""
+        
+        email = session_row["email"]
+        account_row = self.db_handler.fetch(Accounts, {"email": email})
+        if not account_row:
+            return ""
+        
+        return account_row["privilege"]
+        

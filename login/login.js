@@ -21,7 +21,7 @@ function loginUser(email, password) {
     */
     const messageLabel = document.getElementById("message-label");
 
-    fetch("http://localhost:8000/api/login", { // [CHANGE] update this to the port the server will be hosted on, or the actual address if we host the backend online
+    fetch("http://localhost:8000/login", { // [CHANGE] update this to the port the server will be hosted on, or the actual address if we host the backend online
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })

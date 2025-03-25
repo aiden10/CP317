@@ -22,7 +22,9 @@ async function getDashboardData() {
     */
 
     try {
-        const response = await fetch("http://localhost:8000/api/dashboard");
+        const response = await fetch("http://localhost:8000/dashboard", {
+            credentials: 'include'
+        });
         if (!response.ok) {
             alert("Failed to retrieve dashboard data");
             return;

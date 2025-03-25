@@ -1,16 +1,13 @@
 # Imports
-from Server import app, db
 from Tables import Sales, Revenue
 from DatabaseHandler import DatabaseHandler
 from datetime import datetime as dt
 
 # Testing the DatabaseHandler
 if __name__ == "__main__":
-    with app.app_context():
-        #db.drop_all() # Clear the ENTIRE database
-        db.create_all()
-
     db_handler = DatabaseHandler()
+    db_handler.create_tables()
+    #db_handler.drop_all() # Clear the ENTIRE database
 
     # Insert a sales record
     new_sale = Sales(date=dt.now().date(), user="John Doe", department = "dairy", item="milk", quantity=1, price=1500.0)
