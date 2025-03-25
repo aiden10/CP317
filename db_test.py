@@ -10,7 +10,7 @@ if __name__ == "__main__":
     #db_handler.drop_all() # Clear the ENTIRE database
 
     # Insert a sales record
-    new_sale = Sales(date=dt.now().date(), user="John Doe", department = "dairy", item="milk", quantity=1, price=1500.0)
+    new_sale = Sales(date=dt.now().date(), user="Joanna Doe", department = "dairy", item="cheese", quantity=1, price=1500.0)
     db_handler.insert(new_sale)
 
     # Insert a revenue record
@@ -29,8 +29,14 @@ if __name__ == "__main__":
     print("Updated Sale:", updated_sale)
 
     # Delete a sales record
-    db_handler.delete(Sales, {"user": "John Doe"})
+    #db_handler.delete(Sales, {"user": "John Doe"})
 
     # Fetch all revenue records
     revenue_data = db_handler.fetch_table(Revenue)
     print("Revenue Data:", revenue_data)
+
+    # Now test with limited permissions of user (only return their own sales)
+    user = "customer"
+    name = "John Doe"
+
+    print("all my records:", db_handler.fetch(Sales, {"user":name}))
