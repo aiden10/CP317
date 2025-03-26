@@ -35,10 +35,8 @@ class RequestHandler:
     """
     def request_registration(self, request_body: dict) -> dict:
         """
-        Parameters: 
-            - request_body: the JSON data from the POST request. Should contain email, password, and user privilege
-        Returns:
-            - A dict containing the data that will the be sent back to the user from Server.py
+        :param request_body: the JSON data from the POST request. Should contain email, password, and user privilege
+        :return response: the dict that will the be sent back to the user from Server.py
         """
 
         email = request_body["email"]
@@ -52,10 +50,8 @@ class RequestHandler:
     
     def request_login(self, request_body: dict) -> dict:
         """
-        Parameters: 
-            - request_body: the JSON data from the POST request. Should contain the user's email and password
-        Returns:
-            - A dict containing the data that will the be sent back to the user from Server.py
+        :param request_body: the JSON data from the POST request. Should contain email and password
+        :return response: the dict that will the be sent back to the user from Server.py
         """
 
         email = request_body["email"]
@@ -68,10 +64,8 @@ class RequestHandler:
     
     def request_logout(self, cookies: dict) -> dict:
         """
-        Parameters: 
-            - cookies: the cookies from the GET request, forwarded from Server.py
-        Returns:
-            - A dict containing the data that will the be sent back to the user from Server.py
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
         """
         session_token = cookies["session_token"]
         logout_result = self.auth_handler.logout(session_token)
@@ -80,44 +74,58 @@ class RequestHandler:
         
         return {"status_code": 400, "message": "Failed to logout"}
     
-    def request_dashboard(self, cookies: dict) -> dict:
+    def request_dashboard(self, session_token: str) -> dict:
         """
-        Parameters: 
-            - cookies: the cookies from the GET request, forwarded from Server.py
-        Returns:
-            - A dict containing the data that will the be sent back to the user from Server.py
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
         """
-        session_token = cookies["session_token"]
-        self.logger.write_log(f"Resuting dashboard with: {session_token}")
+        self.logger.write_log(f"Requesting dashboard with: {session_token}")
         if self.auth_handler.is_valid_user(session_token):
-            email = self.auth_handler.get_email()
+            email = self.auth_handler.get_email(session_token)
             dashboard_contents = self.dashboard.summarize_reports(email)
+
             return {"status_code": 200, "message": "Successfully retrieved dashboard", "data": dashboard_contents}
 
         return {"status_code": 401, "message": "Session timeout/invalid email/invalid password", "data": {}}
 
-    def request_sales(self, cookies: dict) -> dict:
-        session_token = cookies["session_token"]
+    def request_sales(self, session_token: str) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
+        """
         if self.auth_handler.is_valid_user(session_token):
             ...
     
-    def request_revenue(self, cookies: dict) -> dict:
-        session_token = cookies["session_token"]
+    def request_revenue(self, session_token: str) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
+        """
         if self.auth_handler.is_valid_user(session_token):
             ...
 
-    def request_inventory(self, cookies: dict) -> dict:
-        session_token = cookies["session_token"]
+    def request_inventory(self, session_token: str) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
+        """
         if self.auth_handler.is_valid_user(session_token):
             ...
 
-    def request_inventory_order(self, cookies: dict) -> dict:
-        session_token = cookies["session_token"]
+    def request_inventory_order(self, request_body: dict) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
+        """
+        session_token = request_body["session_token"]
         if self.auth_handler.is_valid_user(session_token):
             ...
     
-    def request_employees(self, cookies: dict) -> dict:
-        session_token = cookies["session_token"]
+    def request_employees(self, session_token: str) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will the be sent back to the user from Server.py
+        """
         if self.auth_handler.is_valid_user(session_token):
             ...
     

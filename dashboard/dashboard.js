@@ -13,7 +13,31 @@ async function populateDashboard(){
     const chartContainer = document.getElementById("chart-container");
     const incomeContainer = document.getElementById("income-container");
     const dashboardData = await getDashboardData();
-    // TODO: populate the containers with dashboardData
+    insightsPanel.innerText = dashboardData.data.insight;
+    var incomeNotes = "";
+    dashboardData.data.income_notes.forEach(note => {
+        incomeNotes += `
+        <div class="income-panel">
+            <span>
+                ${note}
+            </span>
+        </div>`
+    });
+    incomeContainer.innerHTML = incomeNotes;
+
+    var updates = "";
+    dashboardData.data.updates.forEach(update => {
+        updates += `
+        <li>
+            ${update}
+        </li>`
+    });
+    updatesList.innerHTML = `<ul>${updates}</ul>`;
+    var chart = new Image();
+    chart.setAttribute('src', `data:image/jpg;base64,${dashboardData.data.chart}`)
+    chart.width = 650;
+    chart.height = 325;
+    chartContainer.appendChild(chart);
 }
 
 async function getDashboardData() {
