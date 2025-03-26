@@ -31,7 +31,7 @@ async function getDashboardData() {
         }
         const json = await response.json();
         if (json.status_code === 401){
-            window.location.href = "../login/login.html"; // Redirect to login page if they don't have access to view the dashboard. 
+            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the dashboard. 
             return;
         } 
         return json;

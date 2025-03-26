@@ -59,7 +59,6 @@ class AuthenticationHandler:
         create_account = self.db_handler.insert(Accounts(email=email, password_hash=password_hash_str, privilege=privilege))
         create_session = self.db_handler.insert(Sessions(session_token=token, email=email))
         if create_account and create_session:
-            self.logger.write_log(f"Created user: {email} with password: {password}") # Only including the password for debugging
             return token
         
         return ""
@@ -74,7 +73,6 @@ class AuthenticationHandler:
 
         # Get the account associated with the email
         account = self.db_handler.fetch(Accounts, {"email": email})
-        self.logger.write_log(f"Attempting to login user: {email} with password: {password}")
         
         password_bytes = password.encode('utf-8')
         stored_hash_str = account["password_hash"]
@@ -92,7 +90,6 @@ class AuthenticationHandler:
                 self.logger.write_log(f"Error adding session_token: {token} and email: {email}")
                 return ""
         else:
-            self.logger.write_log(f"Invalid password: {hash(password)} != {account['password_hash']}")
             return ""
     
     def logout(self, session_token: str) -> bool:

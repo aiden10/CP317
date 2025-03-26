@@ -40,7 +40,7 @@ function registerUser(email, password, privilege) {
             document.cookie = "session_token=" + data.session_token + "; path=/; Secure";
 
             setTimeout(() => {
-                window.location.href = "../dashboard/dashboard.html";
+                window.location.href = "../dashboard/index.html";
             }, 1000);
         } else {
             messageLabel.style.display = "block"

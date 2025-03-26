@@ -46,7 +46,7 @@
 }
 
 .left-panel-header {
-    font-size: x-large;
+    font-size: 1.5vmax;
     text-align: center;
 }
 
@@ -95,7 +95,7 @@
     row-gap: 5vh;
 }
 #updates-container span {
-    font-size: 36px;
+    font-size: 2.5vw;
     text-align: center;
     color: white;
 }
@@ -116,7 +116,7 @@
     opacity: 0.9;
     box-shadow: 5px 5px 5px 5px black;
 }
-#updates-list span {
+#updates-list li {
     font-size: 22px;
     color: black;
     padding-left: 3vh;
@@ -135,6 +135,10 @@
 #chart-container span {
     font-size: 36px;
     color: white;
+}
+#chart-container img {
+    color: white;
+    text-align: center;
 }
 
 #income-container {
