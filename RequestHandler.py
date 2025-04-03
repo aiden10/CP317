@@ -128,4 +128,20 @@ class RequestHandler:
         """
         if self.auth_handler.is_valid_user(session_token):
             ...
+
+    def request_logout(self, cookies: dict) -> dict:
+        """
+        :param cookies: the cookies from the GET request, forwarded from Server.py
+        :return response: the dict that will be sent back to the user from Server.py
+        """
+        session_token = cookies.get("session_token")
+        logout_result = self.auth_handler.logout(session_token)
+    
+        if logout_result:
+            self.logger.write_log(f"User logged out: {session_token}")  # Log the logout action
+            return {"status_code": 200, "message": "Successfully logged out"}
+        
+        self.logger.write_log(f"Failed logout attempt with session_token: {session_token}")  # Log failed attempt
+        return {"status_code": 400, "message": "Failed to logout"}
+
     
