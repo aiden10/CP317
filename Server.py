@@ -89,5 +89,11 @@ def inventory_order():
 
     return server.request_handler.request_inventory_order(request_body) 
 
+@app.get("/logout")
+def logout():
+    session_token = request.cookies.get("session_token")
+    return server.request_handler.request_logout({"session_token": session_token})
+
+
 if __name__ == "__main__":
     app.run(debug = True, port=8000)
