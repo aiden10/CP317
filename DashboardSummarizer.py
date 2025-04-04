@@ -101,8 +101,8 @@ class DashboardSummarizer:
 
 
         if income_notes:
-            income.append(income_notes[-1]["total_sales"] + " Total Monthly Income")
-            income.append(income_notes[-1]["net_revenue"] + " Net Monthly Income" )
+            income.append(str(income_notes[-1]["total_sales"]) + " Total Monthly Income")
+            income.append(str(income_notes[-1]["net_revenue"]) + " Net Monthly Income" )
             
 
 
