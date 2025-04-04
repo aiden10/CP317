@@ -94,15 +94,29 @@ class RequestHandler:
         :return response: the dict that will the be sent back to the user from Server.py
         """
         if self.auth_handler.is_valid_user(session_token):
-            ...
+            email = self.auth_handler.get_email(session_token)
+            sales_data = self.finance.get_sales(email)
+
+            return {"status_code": 200, "message": "Successfully retrieved sales", "sales data": sales_data}
+            
+        return  {"status_code": 401, "message": "Session timeout/invalid email/invalid password", "sales data": {}}
     
     def request_revenue(self, session_token: str) -> dict:
         """
         :param cookies: the cookies from the GET request, forwarded from Server.py
         :return response: the dict that will the be sent back to the user from Server.py
         """
-        if self.auth_handler.is_valid_user(session_token):
-            ...
+        if self.auth_handler.is_valid_user(session_token): 
+            email = self.auth_handler.get_email(session_token)
+            revenue = self.finance.get_revenue(email)
+
+                
+            return {"status_code": 200, "message": "Successfully retrieved revenue", "revenue data": revenue}
+
+        
+        return {"status_code": 401, "message": "Session timeout/invalid email/invalid privileges/invalid password", "revenue": {}}
+
+            
 
     def request_inventory(self, session_token: str) -> dict:
         """
@@ -110,7 +124,12 @@ class RequestHandler:
         :return response: the dict that will the be sent back to the user from Server.py
         """
         if self.auth_handler.is_valid_user(session_token):
-            ...
+            inventory = self.inventory.get_inventory()
+            return {"status_code": 200, "message": "Successfully retrieved inventory", "inventory data": inventory}
+        
+        return {"status_code": 401, "message": "Session timeout/invalid email/invalid password", "inventory": {}}
+
+            
 
     def request_inventory_order(self, request_body: dict) -> dict:
         """
@@ -119,7 +138,13 @@ class RequestHandler:
         """
         session_token = request_body["session_token"]
         if self.auth_handler.is_valid_user(session_token):
-            ...
+            item_name = request_body["item_name"]
+            quantity = request_body["quantity"]
+            order = self.inventory.order_inventory(item_name, quantity)
+
+            return {"status_code": 200, "message": "Successfully submitted a order", "order data": order}
+        
+        return {"status_code": 401, "message": "Session timeout/invalid email/invalid password", "inventory request": {}}
     
     def request_employees(self, session_token: str) -> dict:
         """
@@ -127,5 +152,11 @@ class RequestHandler:
         :return response: the dict that will the be sent back to the user from Server.py
         """
         if self.auth_handler.is_valid_user(session_token):
-            ...
+            employee = self.employees.get_employees()
+            return {"status_code": 200, "message": "Successfully retrieved employees data", "employee data":employee}
+        
+        return {"status_code": 401, "message": "Session timeout/invalid email/invalid password", "employee data": {}}
+
+
+            
     
