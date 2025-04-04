@@ -39,6 +39,34 @@ class DatabaseHandler:
         """
         db.drop_all()
 
+    def create_table(self, model) -> None:
+        """
+        Creates a specific table in the database
+        
+        :param model: The class of the table to create
+        """
+        try:
+            with app.app_context():
+                model.__table__.create(db.engine, checkfirst=True)
+                self.logger.write_log(f"Table {model.__tablename__} created successfully")
+        except Exception as e:
+            self.logger.write_log(f"Error creating table {model.__tablename__}: {str(e)}")
+            raise e
+
+    def drop_table(self, model) -> None:
+        """
+        Drops a specific table from the database
+        
+        :param model: The class of the table to drop
+        """
+        try:
+            with app.app_context():
+                model.__table__.drop(db.engine, checkfirst=True)
+                self.logger.write_log(f"Table {model.__tablename__} dropped successfully")
+        except Exception as e:
+            self.logger.write_log(f"Error dropping table {model.__tablename__}: {str(e)}")
+            raise e
+
     def contains(self, table, condition) -> bool:
         """
         Checks if at least one record matches the given condition  
@@ -57,8 +85,6 @@ class DatabaseHandler:
         except Exception as e:
             self.logger.write_log(f"Contains check failed: {e}")
             return False
-
-
     def insert(self, record) -> bool:
         """
         Inserts a row into a table
