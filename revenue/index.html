@@ -15,6 +15,7 @@
             <rect y="60" width="100" height="20"></rect>
           </svg>
           <input type="search" id="search-bar">
+          <button id="logout-button" onclick="logout()">Logout</button>
     </nav>
     <div id="left-panel">
         <span class="left-panel-header">Analytics</span>
@@ -41,23 +42,31 @@
         </div>
     </div>
     <div id="insights-panel">
-        loading...
+        <p><b>QUICK INSIGHTS</b></p>
+        <ul>
+            <li>Current monthly revenue is 40% higher than last month’s</li>
+            <li>Customers spend an average of $70 per visit.</li>
+            <li>The top selling departments in 2024 are dairy and bakery</li>
+            <li>Revenues were highest on Dec 1, 2024 and lowest on Feb 2</li>
+        </ul>
     </div>
-    <div id="updates-container">
-        <span>Updates</span>
-        <div id="updates-list">
-        </div>
-    </div>
-    <div id="chart-container">
+    <div id="bar-chart-container">
         <span>Weekly Revenue</span>
+        <img src="../dashboard/assets/chart.png" alt="chart" width="333px" height="200px">
+        </div>
     </div> 
     <div id="income-container">
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
+        <div class="income-panel">$<span id="weekly-revenue">10</span> In revenue this week</div>
+        <div class="income-panel">$<span id="monthly-revenue">30</span> In revenue this month</div>
+        <div class="income-panel">$<span id="yearly-revenue">70</span> In revenue this year</div>
     </div>
+    <div id="pie-chart-container">
+        <span>
+            <p>View:    ⏺Week    ⭘Month    ⭘Year</p>
+            <p>Filter:    All departments ˅</p>
+        </span>
+        <img src="../dashboard/assets/chart.png" alt="chart" width="333px" height="200px">
+    </div>
+    
 </body>
 </html>

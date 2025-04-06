@@ -69,13 +69,13 @@
     position: fixed;
     left: 35vh;
     top: 20vh;
-    height: 10vh;
-    width: 50vh;
-    padding: 5vh;
+    height: 20vh;
+    width: 80vh;
+    padding: 3vh;
     background-color: #f3f3f3;
     text-wrap: wrap;
     text-align: center;
-    font-size: 24px;
+    font-size: 12px;
     border-radius: 15px;
     box-shadow: 2px 2px 2px 2px black;
 }
@@ -85,58 +85,55 @@
     opacity: 0.9;
 }
 
-#updates-container {
+#bar-chart-container {
     position: fixed;
     display: flex;
     flex-direction: column;
-    left: 35vh;
-    top: 55vh;
-    width: 50vh;
-    row-gap: 5vh;
-}
-#updates-container span {
-    font-size: 2.5vw;
-    text-align: center;
-    color: white;
-}
-
-#updates-list {
-    width: 100%;
-    height: 30vh;
-    background-color: #f3f3f3;
-    box-shadow: 2px 2px 2px 2px black;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    align-items: start;
-    padding-bottom: 1vh;
-}
-#updates-list:hover {
-    opacity: 0.9;
-    box-shadow: 5px 5px 5px 5px black;
-}
-#updates-list li {
-    font-size: 22px;
-    color: black;
-    padding-left: 3vh;
-    padding-top: 3vh;
-}
-
-#chart-container {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    right: 15vh;
-    top: 43vh;
+    left: 17vmax;
+    top: 50vh;
+    width: 50vw;
+    height: 25vh;
     row-gap: 4vh;
-    align-items: center;
+    align-items: start;
+    text-align: start;
 }
-#chart-container span {
+#bar-chart-container span {
     font-size: 36px;
     color: white;
 }
-#chart-container img {
+#bar-chart-container img {
+    color: white;
+    text-align: center;
+}
+#logout-button {
+    background-color: #3d3d3d;
+    color: white;
+    cursor: pointer;
+    width: 5vw;
+    margin-left: 40vw;
+}
+
+#logout-button:hover {
+    opacity: 0.8;
+}
+
+#chart-options {
+    color:white;
+}
+
+#pie-chart-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    right: 45vh;
+    top: 50vh;
+    align-items: center;
+}
+#pie-chart-container span {
+    font-size: 16px;
+    color: white;
+}
+#pie-chart-container img {
     color: white;
     text-align: center;
 }
@@ -148,6 +145,7 @@
     right: 45vh;
     top: 15vh;
     row-gap: 4vh;
+    color: green;
 }
 
 .income-panel {
