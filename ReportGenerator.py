@@ -42,7 +42,7 @@ class ReportGenerator:
         self.logger = Logger()
 
     
-    def generate_graph(report_data : dict) -> plt.figure:
+    def generate_graph(report_data : dict, database_table : string) -> plt.figure:
         """
         -------------------------------------------------------
         Creates a graph based on the report data passed. The
@@ -55,30 +55,56 @@ class ReportGenerator:
         Parameters:
             report_data - a dictionary filled with strings (Dictionary)
         Returns:
-            None
+            figure - a figure/graph representing a set of data (Figure)
         -------------------------------------------------------
         """
 
         # Determine a list of values in columns A and B
         column_titles = report_data.values # Determine columns to select in database
 
-        # Then SQL statements will be used here to gather data from table and insert data into the arrays below
-        # query_statement =
-        #
-        #
+        # Determine array
+        item_column = column_titles[0] # Name of column in database with items
+        count_column = column_titles[1] # Name of column in database with revenue or count of items
 
-        items = []
-        item_counts = []
+
+        # Fill arrays with data from both columns in the database
+        query_statement = "SELECT " + item_column + " FROM " + database_table
+        mycursor.execute(query_statement)
+
+        items = mycursor.fetchall() # Fetch recently executed query
+        items = list(zip(*items)) # Convert query of data into a list/array of items
+
+
+        query_statement = "SELECT " + count_column + " FROM " + database_table
+        mycursor.execute(query_statement)
+
+        item_counts = mycursor.fetchall()
+        item_counts = list(zip(*item_counts))
+
 
         # Generate Graph
-
         figure = plt.figure
         axes = figure.add_subplot(1, 1, 1)
         axes.bar(
-            range(len(items)),
-            item_counts,
-            tick_label=items
+            range(len(items)), # Count of items for x-axis
+            item_counts, # Revenue or stock of items for y-axis
+            tick_label=items # Labelling each bar under the x-axis with item names
         )
         
         return figure
+    
+        """
+        -------------------------------------------------------
+        Function: generate_graph
+        -------------------------------------------------------
+        Assmptions: report_data is a dictionary variable filled
+        with two strings. The first string contains the column
+        name of items from the database and the second contains
+        the second column name of the table being either "Revenue"
+        or "Stock". database_table is the table name in the database
+        to select. Using these parameters, the program will
+        execute query statements to gather this data into two
+        arrays which will then be plotted onto a bar graph.
+        -------------------------------------------------------
+        """
     
