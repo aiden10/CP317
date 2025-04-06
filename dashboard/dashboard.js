@@ -72,15 +72,13 @@ function showLeftPanel(){
 
 // Function to handle logout
 function logout() {
-    const sessionToken = getCookie("session_token");
-
     // Send GET request to the /logout endpoint
     fetch("http://localhost:8000/logout", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "same-origin", // Send cookies with the request
+        credentials: "include",
     })
     .then((response) => response.json())
     .then((data) => {
@@ -99,10 +97,3 @@ function logout() {
     });
 }
 
-// Function to get the value of a cookie by its name
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
-}
