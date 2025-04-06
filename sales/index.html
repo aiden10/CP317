@@ -15,6 +15,7 @@
             <rect y="60" width="100" height="20"></rect>
           </svg>
           <input type="search" id="search-bar">
+          <button id="logout-button" onclick="logout()">Logout</button>
     </nav>
     <div id="left-panel">
         <span class="left-panel-header">Analytics</span>
@@ -43,15 +44,14 @@
     <div id="insights-panel">
         loading...
     </div>
-    <div id="updates-container">
-        <span>Updates</span>
-        <div id="updates-list">
-        </div>
-    </div>
     <div id="chart-container">
-        <span>Weekly Revenue</span>
-    </div> 
+        <span>Sales</span>
+        <img src="../dashboard/assets/chart.png" alt="chart" width="1000px" height="325px">
+    </div>
     <div id="income-container">
+        <div class="income-panel">
+            <span>loading...</span>
+        </div>
         <div class="income-panel">
             <span>loading...</span>
         </div>

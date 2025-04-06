@@ -26,7 +26,17 @@
     background-color: #414141;
     color: white;
 }
+#logout-button {
+    background-color: #3d3d3d;
+    color: white;
+    cursor: pointer;
+    width: 5vw;
+    margin-left: 40vw;
+}
 
+#logout-button:hover {
+    opacity: 0.8;
+}
 #left-panel {
     margin-left: 1.1vh;
     position: fixed;
