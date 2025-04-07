@@ -9,7 +9,6 @@ Called From:
 """
 
 from DatabaseHandler import DatabaseHandler
-from ReportGenerator import ReportGenerator
 from Logger import Logger
 from Tables import Sales, Revenue
 import pandas as pd
@@ -18,22 +17,11 @@ from datetime import timedelta, datetime
 class FinanceModule:
     def __init__(self):
         self.db_handler = DatabaseHandler()
-        self.report_generator = ReportGenerator()
         self.logger = Logger("FinanceModule")
     
     def get_sales(self, email: str) -> list:
         return self.db_handler.fetch_table(Sales)
-    
-    def get_sales_report(self, email: str) -> dict:
-        # Email unused because not every email has sales data
-        # For testing, we'll just show the sales data of the entire sales table.
-        sales_data = self.db_handler.fetch_table(Sales)
-        return {
-                "chart": self.report_generator.generate_sales_graph(sales_data),
-                "insight": self.get_insight(sales_data),
-                "income_notes": self.get_income_notes(sales_data),
-            }
-
+        
     def get_insight(self, sales_data: list) -> str:
         """
         Analyzes sales data to provide a meaningful insight about trends or statistics.

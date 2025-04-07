@@ -18,6 +18,7 @@ from DashboardSummarizer import DashboardSummarizer
 from FinanceModule import FinanceModule
 from EmployeeManagement import EmployeeManagement
 from InventoryManagement import InventoryManagement
+from ReportGenerator import ReportGenerator
 from Logger import Logger
 
 class RequestHandler:
@@ -27,6 +28,7 @@ class RequestHandler:
         self.finance = FinanceModule() # For handling sales and revenue
         self.employees = EmployeeManagement()
         self.inventory = InventoryManagement()
+        self.reports = ReportGenerator()
         self.logger = Logger("RequestHandler")
 
     """
@@ -98,7 +100,7 @@ class RequestHandler:
         """
         if self.auth_handler.is_valid_user(session_token):
             email = self.auth_handler.get_email(session_token)
-            sales_data = self.finance.get_sales_report(email)
+            sales_data = self.reports.generate_sales_report(email)
 
             return {"status_code": 200, "message": "Successfully retrieved sales", "data": sales_data}
             

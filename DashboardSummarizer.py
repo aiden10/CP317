@@ -9,8 +9,8 @@ Called From:
     - RequestHandler
 
 """
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+# from reportlab.lib.pagesizes import letter
+# from reportlab.pdfgen import canvas
 from FinanceModule import FinanceModule
 from AssetManagement import AssetManagement
 from datetime import datetime

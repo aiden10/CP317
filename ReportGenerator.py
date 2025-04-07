@@ -2,6 +2,7 @@
 """
 Uses: 
     - Logger
+    - FinanceModule
 
 Called From:
     - DashboardSummarizer
@@ -16,12 +17,24 @@ import io
 import base64
 import pandas as pd
 from Logger import Logger
+from Tables import Sales
+from FinanceModule import FinanceModule
 
 class ReportGenerator:
     def __init__(self):
         self.logger = Logger("ReportGenerator")
+        self.finance = FinanceModule()
 
-    
+    def generate_sales_report(self, email: str) -> dict:
+        # Email unused because not every email has sales data
+        # For testing, we'll just show the sales data of the entire sales table.
+        sales_data = self.finance.get_sales(email)
+        return {
+                "chart": self.generate_sales_graph(sales_data),
+                "insight": self.finance.get_insight(sales_data),
+                "income_notes": self.finance.get_income_notes(sales_data),
+            }
+
     def generate_sales_graph(self, sales_data: dict) -> str:
         """
         Generates a graph based on sales data.
