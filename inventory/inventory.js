@@ -14,7 +14,7 @@ async function populateInventory(){
     const tableBody = document.querySelector('#inventory-table tbody');
     let inventoryRows = '';
 
-    inventoryData.data.inventory_items.forEach(item => {
+    inventoryData.data.forEach(item => {
         inventoryRows += `
             <tr>
                 <td>${item.item_name}</td>
@@ -28,7 +28,7 @@ async function populateInventory(){
     tableBody.innerHTML = inventoryRows;
 }
 
-async function getsInventoryData() {
+async function getInventoryData() {
     /*
     Retrieves the inventory data and redirects unauthorized users.
     */
