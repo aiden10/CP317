@@ -22,7 +22,7 @@ To get started, first cd into the CP317 directory and run `pip install -r requir
 
 Next, host the server on your local netword by running the Server.py file.
 
-Lastly, run: `python -m http.server 8000` to host the front end. 
+Lastly, run: `python -m http.server 3000` to host the front end. 
 
 # Usage
-Once the GSFT application is running locally on your device, navigate to `localhost:8000/register` to create a new account. You will automatically be redirected to the dashboard.
+Once the GSFT application is running locally on your device, navigate to `localhost:3000/register` to create a new account. You will automatically be redirected to the dashboard.
