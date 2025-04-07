@@ -71,14 +71,22 @@ function showLeftPanel(){
 }
 
 // Function to handle logout
+// dashboard.js
+
+// Function to handle logout
 function logout() {
+    const sessionToken = getCookie("session_token");
+
+    // Log the logout action on the frontend
+    console.log(`User attempting to log out with session_token: ${sessionToken}`);
+
     // Send GET request to the /logout endpoint
     fetch("http://localhost:8000/logout", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
+        credentials: "same-origin", // Send cookies with the request
     })
     .then((response) => response.json())
     .then((data) => {
