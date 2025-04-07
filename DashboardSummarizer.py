@@ -23,14 +23,6 @@ class DashboardSummarizer:
         self.finances = FinanceModule()
         self.logger = Logger("DashboardSummary")
 
-    # Uses the email to know which data to fetch from the database
-    def get_report_data(self, email: str) -> dict:
-        return {
-            "sales": self.finances.get_sales(email),
-            "revenue": self.finances.get_revenue(email),
-            "assets": self.assets.get_assets(email) # Not really sure what assets are, but it was listed in the diagram   
-        }
-
     # Unsure if these should return strings or something else like an image or pdf
     def generate_report(self, report_data: dict, file=None):
         file = "generate_report.pdf"
@@ -107,7 +99,7 @@ class DashboardSummarizer:
 
 
         return {
-            "updates": "$" + str(updates[0]) + " made in sales today", # will generate sales generated on current day 
+            "updates": ["$" + str(updates[0]) + " made in sales today"], # will generate sales generated on current day 
             "chart": encoded_image,
             "income_notes": income,
             "insight": f"Your current monthly sales is up ${sales} currently"  #previous month revenue is not stored, so will generate how much $ spent on sales 

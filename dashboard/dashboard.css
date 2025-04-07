@@ -40,7 +40,7 @@
 #left-panel {
     margin-left: 1.1vh;
     position: fixed;
-    left: -200px;
+    left: -300px;
     top: 9vh;
     display: flex;
     transition: left 0.5s ease-out;
