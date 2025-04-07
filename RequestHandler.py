@@ -70,8 +70,11 @@ class RequestHandler:
         session_token = cookies["session_token"]
         logout_result = self.auth_handler.logout(session_token)
         if logout_result:
+            #log successful logout
+            self.logger.write_log(f"User session {session_token) logged out successfully at {datetime.now()}")
             return {"status_code": 200, "message": "Successfully logged out"}
-        
+        #log failed logout attempt
+        self.logger.write_log(f"Failed logout attempt with session_token: {session_token} at {datetime.now()}")
         return {"status_code": 400, "message": "Failed to logout"}
     
     def request_dashboard(self, session_token: str) -> dict:
