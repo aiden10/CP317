@@ -27,27 +27,33 @@ CREATE TABLE employees (
     first_name varchar(255),
     last_name varchar(255),
     position varchar(255),
-    pay decmial(19, 4),
+    pay decimal(19, 4),
     weekly_hours float,
     primary key (employee_id)
 );
 
 -- Sales table
 CREATE TABLE sales (
-    owner_email varchar(255),
-    amount decimal(19, 4),
-    sale_date date
+    sale_id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_email VARCHAR(255),
+    amount DECIMAL(19, 4),
+    sale_date DATE,
+    FOREIGN KEY (owner_email) REFERENCES accounts(email)
 );
 
 -- Revenue table
 CREATE TABLE revenue (
-    -- Not sure what the difference between sales and revenue is in this case
-    owner_email varchar(255),
-    amount decimal(19, 4)
+    revenue_id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_email VARCHAR(255),
+    amount DECIMAL(19, 4),
+    FOREIGN KEY (owner_email) REFERENCES accounts(email)
 );
 
 -- Assets table
 CREATE TABLE assets (
-    -- Not sure what assets is here
-    owner_email varchar(255),
+    asset_id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_email VARCHAR(255),
+    description VARCHAR(255),
+    value DECIMAL(19, 4),
+    FOREIGN KEY (owner_email) REFERENCES accounts(email)
 );
