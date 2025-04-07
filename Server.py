@@ -48,11 +48,6 @@ def register():
     }
     return server.request_handler.request_registration(request_body) 
 
-# route to logout
-@app.get("/logout")
-def logout():
-    return server.request_handler.request_logout(request.cookies.get("session_token")) 
-
 # route to dashboard
 @app.get("/dashboard")
 def dashboard():
@@ -93,7 +88,6 @@ def inventory_order():
 def logout():
     session_token = request.cookies.get("session_token")
     return server.request_handler.request_logout({"session_token": session_token})
-
 
 if __name__ == "__main__":
     app.run(debug = True, port=8000)

@@ -27,7 +27,7 @@ async function populateSales(){
     var chart = new Image();
     chart.setAttribute('src', `data:image/jpg;base64,${salesData.data.chart}`)
     chart.width = 1000;
-    chart.height = 325;
+    chart.height = 500;
     chartContainer.appendChild(chart);
 }
 

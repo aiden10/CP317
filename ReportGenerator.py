@@ -11,100 +11,74 @@ This file should probably be the one generating graphs and maybe insights? But t
 """
 
 import matplotlib.pyplot as plt
-import string
+import matplotlib.dates as mdates
+import io
+import base64
+import pandas as pd
 from Logger import Logger
-
-import mysql.connector
-
-mydb = mysql.connector.connect(
-    host = "localhost", # [CHANGE] Change this string to host of the database we are using 
-    user = "username", # [CHANGE] Change this string to username database is using
-    password = "password", # [CHANGE] Change this string to password database is using
-    database = "database" # [CHANGE] Change this string to the name of the database we are using
-)
-
-mycursor = mydb.cursor()
-
 
 class ReportGenerator:
     def __init__(self):
-        """
-        -------------------------------------------------------
-        Initializes the ReportGenerator class.
-        Use: ReportGenerator()
-        -------------------------------------------------------
-        Parameters:
-            None
-        Returns:
-            None
-        -------------------------------------------------------
-        """
-        self.logger = Logger()
+        self.logger = Logger("ReportGenerator")
 
     
-    def generate_graph(report_data : dict, database_table : string) -> plt.figure:
+    def generate_sales_graph(self, sales_data: dict) -> str:
         """
-        -------------------------------------------------------
-        Creates a graph based on the report data passed. The
-        report_data contains a dictionary of strings that
-        represents the column names in the database table.
-        This function will locate the these columns in the
-        database using report_data in order to generate a graph.
-        Use: generate_graph(report_data)
-        -------------------------------------------------------
-        Parameters:
-            report_data - a dictionary filled with strings (Dictionary)
-        Returns:
-            figure - a figure/graph representing a set of data (Figure)
-        -------------------------------------------------------
+        Generates a graph based on sales data.
+        :param sales_data: the sales data used to generate the graph
+        :return encoded_graph: the graph encoded as a string
         """
-
-        # Determine a list of values in columns A and B
-        column_titles = report_data.values # Determine columns to select in database
-
-        # Determine array
-        item_column = column_titles[0] # Name of column in database with items
-        count_column = column_titles[1] # Name of column in database with revenue or count of items
-
-
-        # Fill arrays with data from both columns in the database
-        query_statement = "SELECT " + item_column + " FROM " + database_table
-        mycursor.execute(query_statement)
-
-        items = mycursor.fetchall() # Fetch recently executed query
-        items = list(zip(*items)) # Convert query of data into a list/array of items
-
-
-        query_statement = "SELECT " + count_column + " FROM " + database_table
-        mycursor.execute(query_statement)
-
-        item_counts = mycursor.fetchall()
-        item_counts = list(zip(*item_counts))
-
-
-        # Generate Graph
-        figure = plt.figure
-        axes = figure.add_subplot(1, 1, 1)
-        axes.bar(
-            range(len(items)), # Count of items for x-axis
-            item_counts, # Revenue or stock of items for y-axis
-            tick_label=items # Labelling each bar under the x-axis with item names
-        )
         
-        return figure
+        df = pd.DataFrame(sales_data)
+        plt.style.use('dark_background')
+        if isinstance(df['date'].iloc[0], str):
+            df['date'] = pd.to_datetime(df['date'])
+        
+        df['revenue'] = df['quantity'] * df['price']
+        
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        fig.suptitle('Sales Analytics', fontsize=16)
+        
+        daily_sales = df.groupby('date')['revenue'].sum().reset_index()
+        axes[0, 0].plot(daily_sales['date'], daily_sales['revenue'], marker='o', linestyle='-', color='royalblue')
+        axes[0, 0].set_title('Daily Sales Revenue')
+        axes[0, 0].set_xlabel('Date')
+        axes[0, 0].set_ylabel('Revenue ($)')
+        axes[0, 0].grid(True, alpha=0.3)
+        axes[0, 0].xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.setp(axes[0, 0].xaxis.get_majorticklabels(), rotation=45)
+        
+        dept_sales = df.groupby('department')['revenue'].sum().sort_values(ascending=False)
+        dept_sales.plot(kind='bar', ax=axes[0, 1], color='teal')
+        axes[0, 1].set_title('Sales by Department')
+        axes[0, 1].set_xlabel('Department')
+        axes[0, 1].set_ylabel('Revenue ($)')
+        axes[0, 1].grid(True, alpha=0.3, axis='y')
+        
+        top_items_qty = df.groupby('item')['quantity'].sum().sort_values(ascending=False).head(5)
+        top_items_qty.plot(kind='barh', ax=axes[1, 0], color='green')
+        axes[1, 0].set_title('Top 5 Products by Quantity Sold')
+        axes[1, 0].set_xlabel('Quantity Sold')
+        axes[1, 0].set_ylabel('Product')
+        axes[1, 0].grid(True, alpha=0.3, axis='x')
+        
+        top_items_rev = df.groupby('item')['revenue'].sum().sort_values(ascending=False).head(5)
+        explode = [0.1] + [0 for _ in range(len(top_items_rev)-1)]
+        axes[1, 1].pie(top_items_rev, labels=top_items_rev.index, autopct='%1.1f%%', 
+                    startangle=90, shadow=True, explode=explode)
+        axes[1, 1].set_title('Top 5 Products by Revenue')
+        
+        plt.tight_layout()
+        fig.subplots_adjust(top=0.9)
+        
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100)
+        buffer.seek(0)
+        
+        encoded_image = base64.b64encode(buffer.read()).decode('utf-8')
+        
+        plt.close(fig)
+        
+        return encoded_image
     
-        """
-        -------------------------------------------------------
-        Function: generate_graph
-        -------------------------------------------------------
-        Assmptions: report_data is a dictionary variable filled
-        with two strings. The first string contains the column
-        name of items from the database and the second contains
-        the second column name of the table being either "Revenue"
-        or "Stock". database_table is the table name in the database
-        to select. Using these parameters, the program will
-        execute query statements to gather this data into two
-        arrays which will then be plotted onto a bar graph.
-        -------------------------------------------------------
-        """
     
