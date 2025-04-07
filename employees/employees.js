@@ -1,20 +1,20 @@
 
 
-// Call populateSales function when page loads
-document.addEventListener('DOMContentLoaded', populateSales);
+// Call populateEmployees function when page loads
+document.addEventListener('DOMContentLoaded', populateEmployees);
 
-async function populateSales(){
+async function populateEmployees(){
     /*
-    Called when the page loads. Retrieves the sales data and populates the containers to display the retrieved data.
+    Called when the page loads. Retrieves the employees data and populates the containers to display the retrieved data.
     */
     // Get element containers
     const insightsPanel = document.getElementById("insights-panel");
     const chartContainer = document.getElementById("chart-container");
     const incomeContainer = document.getElementById("income-container");
-    const salesData = await getsalesData();
-    insightsPanel.innerText = salesData.data.insight;
+    const employeesData = await getEmployeesData();
+    insightsPanel.innerText = employeesData.data.insight;
     var incomeNotes = "";
-    salesData.data.income_notes.forEach(note => {
+    employeesData.data.income_notes.forEach(note => {
         incomeNotes += `
         <div class="income-panel">
             <span>
@@ -25,28 +25,28 @@ async function populateSales(){
     incomeContainer.innerHTML = incomeNotes;
 
     var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${salesData.data.chart}`)
+    chart.setAttribute('src', `data:image/jpg;base64,${employeesData.data.chart}`)
     chart.width = 1000;
     chart.height = 325;
     chartContainer.appendChild(chart);
 }
 
-async function getsalesData() {
+async function getEmployeesData() {
     /*
-    Retrieves the sales data and redirects unauthorized users.
+    Retrieves the employees data and redirects unauthorized users.
     */
 
     try {
-        const response = await fetch("http://localhost:8000/sales", {
+        const response = await fetch("http://localhost:8000/employees", {
             credentials: 'include'
         });
         if (!response.ok) {
-            alert("Failed to retrieve sales data");
+            alert("Failed to retrieve employees data");
             return;
         }
         const json = await response.json();
         if (json.status_code === 401){
-            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the sales. 
+            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the employees. 
             return;
         } 
         return json;
@@ -87,3 +87,32 @@ function logout() {
         console.error("Error during logout:", error);
     });
 }
+
+// place-holder employee info
+const employees = [
+    { name: "Alice Smith", pay: "$22.25", hours: "35h", position: "Bakery Manager" },
+    { name: "Bob Johnson", pay: "$18.50", hours: "30h", position: "Cashier" },
+    { name: "Charlie Brown", pay: "$25.00", hours: "40h", position: "Head Chef" },
+    { name: "Diana Prince", pay: "$20.00", hours: "28h", position: "Barista" },
+    { name: "Edward Blake", pay: "$19.75", hours: "32h", position: "Stock Clerk" },
+  ];
+
+  function selectEmployee(index) {
+    const emp = employees[index];
+
+    // Hide placeholder message, show details
+    document.getElementById("placeholder-message").style.display = "none";
+    document.getElementById("employee-details").style.display = "flex";
+
+    document.getElementById("employee-name").textContent = emp.name;
+    document.getElementById("pay").textContent = emp.pay;
+    document.getElementById("hours").textContent = emp.hours;
+    document.getElementById("position").textContent = emp.position;
+  }
+
+
+  function changeLocation() {
+    const selected = document.getElementById("location-select").value;
+    console.log("Location changed to:", selected);
+    // Optional: trigger employee filtering or backend call here
+  }

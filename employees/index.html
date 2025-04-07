@@ -41,23 +41,35 @@
             Order
         </div>
     </div>
-    <div id="insights-panel">
-        loading...
+    <div class="address-dropdown">
+        <select id="location-select" onchange="changeLocation()">
+        <option>29 University Avenue, Waterloo, ON</option>
+        <option>123 King Street, Toronto, ON</option>
+        <option>45 Queen Blvd, Ottawa, ON</option>
+        <option>9 Bayview Drive, Hamilton, ON</option>
+        </select>
     </div>
-    <div id="updates-container">
-        <span>Updates</span>
-        <div id="updates-list">
-        </div>
+    <h2 class="employee-head">Employees</h2>
+    <div class="employee-list">
+        <button class="employee-button" onclick="selectEmployee(0)">Alice Smith</button>
+        <button class="employee-button" onclick="selectEmployee(1)">Bob Johnson</button>
+        <button class="employee-button" onclick="selectEmployee(2)">Charlie Brown</button>
+        <button class="employee-button" onclick="selectEmployee(3)">Diana Prince</button>
+        <button class="employee-button" onclick="selectEmployee(4)">Edward Blake</button>
     </div>
-    <div id="chart-container">
-        <span>Weekly Revenue</span>
-    </div> 
-    <div id="income-container">
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-        <div class="income-panel">
-            <span>loading...</span>
+    
+    <div class="right-panel" id="details-panel">
+        <div id="placeholder-message">Please select an employee</div>
+        
+        <div id="employee-details" style="display: none;">
+            <div class="profile-name" id="employee-name">First Name, Last Name</div>
+            <div class="photo-placeholder">EMPLOYEE<br>PHOTO HERE</div>
+            <table class="info-table">
+            <tr><td>Pay</td><td id="pay">$0.00</td></tr>
+            <tr><td>Hours (weekly)</td><td id="hours">0h</td></tr>
+            <tr><td>Position</td><td id="position">N/A</td></tr>
+            </table>
+            <button class="report-button">Payroll Report</button>
         </div>
     </div>
 </body>

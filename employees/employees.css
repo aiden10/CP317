@@ -75,63 +75,139 @@
     color:black;
     text-decoration:none;
 }
-#insights-panel:hover {
-    box-shadow: 5px 5px 5px 5px black;
-    background-color: #f8f8f8;
-    opacity: 0.9;
-}
 
-#updates-container {
+.right-panel {
     position: fixed;
-    display: flex;
-    flex-direction: column;
-    left: 35vh;
-    top: 55vh;
-    width: 50vh;
-    row-gap: 5vh;
-}
-#chart-container {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    left: 17vmax;
-    top: 43vh;
-    width: 50vw;
-    height: 25vh;
-    row-gap: 4vh;
-    align-items: start;
-    text-align: start;
-}
-#chart-container span {
-    font-size: 36px;
-    color: white;
-}
-#chart-container img {
-    color: white;
-    text-align: center;
-}
-
-#income-container {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    right: 45vh;
     top: 15vh;
-    row-gap: 4vh;
+    width: 40%;
+    display: flex;
+    right: 2vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+    padding: 20px;
+    background-color: #eee;
+    margin-right: 2vw;
+    border-radius: 25px;
+    box-sizing: border-box;
 }
 
-.income-panel {
-    background-color: #f3f3f3;
-    box-shadow: 2px 2px 2px 2px black;
-    padding: 3vh;
-    border-radius: 10px;
+.address-dropdown, .employee-head, .employee-list {
+    position: fixed;
+    left: 16vw;
+    width: 30vw;
 }
-.income-panel:hover {
-    opacity: 0.8;
-    box-shadow: 4px 4px 4px 4px black;
+
+.employee-head {
+    text-align: center;
+    color: white;
+    top: 25vh;
 }
-.income-panel span {
-    color: green;
-    font-weight: bold;
-    text-shadow: 1px 1px greenyellow;
+
+.address-dropdown {
+    top: 15vh;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.address-dropdown::before {
+  margin-right: 10px;
+  font-size: 20px;
+  color: white;
+}
+.address-dropdown select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  color: black;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.employee-list {
+    position: fixed;
+    background-color: #eee;
+    top: 40vh;
+    left: 16vw;
+    border-radius: 25px;
+    padding: 15px;
+    height: 50vh;
+}
+
+.employee-button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.employee-button:hover {
+  background-color: #ddd;
+}
+
+#employee-details {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#placeholder-message {
+  font-size: 20px;
+  color: #666;
+  margin-top: 30vh;
+  height: 35vh;
+}
+
+.profile-name {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  box-shadow: 1px 1px 4px #ccc;
+}
+.profile-name::before {
+  margin-right: 10px;
+}
+
+.photo-placeholder {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.info-table {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  width: 80%;
+}
+.info-table td {
+  border: 1px solid #999;
+  padding: 8px 12px;
+}
+
+.report-button {
+  padding: 8px 15px;
+  background-color: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.report-button:hover {
+  background-color: #ccc;
 }
