@@ -17,7 +17,7 @@ class InventoryManagement:
         self.logger = Logger("InventoryManagement")
 
     def get_inventory(self) -> list:
-        self.db_handler.fetch_table("inventory")
+        return self.db_handler.fetch_table("inventory")
 
     def order_inventory(self, item_name: str, quantity: int) -> None:
         if len(self.db_handler.fetch((item_name), "inventory", "item_name")) > 0:            
