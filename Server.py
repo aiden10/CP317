@@ -77,8 +77,8 @@ def inventory():
 @app.post("/inventory/order")
 def inventory_order():
     request_body = {
-        "quatity": request.json.get("quantity"),
-        "product_name": request.json.get("quantity"),
+        "quantity": request.json.get("quantity"),
+        "item_name": request.json.get("item_name"),
         "session_token": request.cookies.get("session_token")
     }
 
