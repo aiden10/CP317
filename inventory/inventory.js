@@ -1,52 +1,49 @@
 
 
-// Call populateSales function when page loads
-document.addEventListener('DOMContentLoaded', populateSales);
+// Call populateInventory function when page loads
+document.addEventListener('DOMContentLoaded', populateInventory);
 
-async function populateSales(){
+async function populateInventory(){
     /*
-    Called when the page loads. Retrieves the sales data and populates the containers to display the retrieved data.
+    Called when the page loads. Retrieves the inventory data and populates the containers to display the retrieved data.
     */
     // Get element containers
-    const insightsPanel = document.getElementById("insights-panel");
-    const chartContainer = document.getElementById("chart-container");
-    const incomeContainer = document.getElementById("income-container");
-    const salesData = await getsalesData();
-    insightsPanel.innerText = salesData.data.insight;
-    var incomeNotes = "";
-    salesData.data.income_notes.forEach(note => {
-        incomeNotes += `
-        <div class="income-panel">
-            <span>
-                ${note}
-            </span>
-        </div>`
-    });
-    incomeContainer.innerHTML = incomeNotes;
+    const inventoryData = await getInventoryData();
 
-    var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${salesData.data.chart}`)
-    chart.width = 1000;
-    chart.height = 325;
-    chartContainer.appendChild(chart);
+    // Populate inventory table
+    const tableBody = document.querySelector('#inventory-table tbody');
+    let inventoryRows = '';
+
+    inventoryData.data.inventory_items.forEach(item => {
+        inventoryRows += `
+            <tr>
+                <td>${item.item_name}</td>
+                <td>${item.category}</td>
+                <td>${item.price}</td>
+                <td>${item.quantity}</td>
+            </tr>
+        `;
+    });
+
+    tableBody.innerHTML = inventoryRows;
 }
 
-async function getsalesData() {
+async function getsInventoryData() {
     /*
-    Retrieves the sales data and redirects unauthorized users.
+    Retrieves the inventory data and redirects unauthorized users.
     */
 
     try {
-        const response = await fetch("http://localhost:8000/sales", {
+        const response = await fetch("http://localhost:8000/inventory", {
             credentials: 'include'
         });
         if (!response.ok) {
-            alert("Failed to retrieve sales data");
+            alert("Failed to retrieve inventory data");
             return;
         }
         const json = await response.json();
         if (json.status_code === 401){
-            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the sales. 
+            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the inventory. 
             return;
         } 
         return json;
