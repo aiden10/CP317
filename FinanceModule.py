@@ -40,9 +40,6 @@ class FinanceModule:
         :param sales_data: list of dictionaries containing sales data
         :return insight: a string which shows some trend or interesting statistic
         """
-        import pandas as pd
-        from datetime import datetime, timedelta
-        import numpy as np
         
         # Return empty string if no data
         if not sales_data or len(sales_data) == 0:
