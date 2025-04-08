@@ -99,7 +99,7 @@ class RequestHandler:
         """
         if self.auth_handler.is_valid_user(session_token): 
             email = self.auth_handler.get_email(session_token)
-            revenue = self.finance.get_revenue(email)
+            revenue = self.reports.generate_revenue_report(email)
 
                 
             return {"status_code": 200, "message": "Successfully retrieved revenue", "data": revenue}

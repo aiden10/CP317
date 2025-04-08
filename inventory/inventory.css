@@ -145,6 +145,7 @@
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
     width: 70vw;
     color: #000;
+    z-index: -1;
 }
 
 #inventory-container h2 {

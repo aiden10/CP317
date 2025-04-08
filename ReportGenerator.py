@@ -19,6 +19,7 @@ import pandas as pd
 from Logger import Logger
 from Tables import Sales
 from FinanceModule import FinanceModule
+from datetime import datetime
 
 class ReportGenerator:
     def __init__(self):
@@ -35,7 +36,89 @@ class ReportGenerator:
                 "income_notes": self.finance.get_income_notes(sales_data),
             }
 
-    def generate_sales_graph(self, sales_data: dict) -> str:
+    def generate_revenue_report(self, email: str) -> dict:
+        # Email unused because not every email has sales data
+        # For testing, we'll just show the revenue data of the entire revenue table.
+        revenue_data = self.finance.get_revenue(email)
+        sales_data = self.finance.get_sales(email)
+
+        return {
+                "bar_chart": self.generate_revenue_bar_graph(revenue_data),
+                "pie_chart": self.generate_revenue_pie_graph(revenue_data),
+                "insight": self.finance.get_insight(sales_data),
+                "income_notes": self.finance.get_income_notes(sales_data),
+            }
+
+    def generate_revenue_bar_graph(self, revenue_data: list) -> str:
+        """
+        Generates a bar graph based on revenue data. The graph shows weekly revenue.
+        :param revenue_data: the revenue data used to generate the graph
+        :return encoded_graph: the graph encoded as a string
+        """
+        df = pd.DataFrame(revenue_data)
+        plt.style.use('dark_background')
+
+        # Convert to datetime safely
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        df = df.dropna(subset=['date'])  # Drop any invalid dates
+
+        # Group by week starting Monday
+        df['week'] = df['date'].dt.to_period('W-MON').apply(lambda r: r.start_time)
+
+        weekly_revenue = df.groupby('week')['net_revenue'].sum().reset_index()
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(weekly_revenue['week'], weekly_revenue['net_revenue'], color='skyblue')
+        ax.set_title('Weekly Net Revenue')
+        ax.set_xlabel('Week')
+        ax.set_ylabel('Net Revenue ($)')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+        plt.xticks(rotation=45)
+        ax.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100)
+        buffer.seek(0)
+
+        encoded_image = base64.b64encode(buffer.read()).decode('utf-8')
+        plt.close(fig)
+
+        return encoded_image
+
+    def generate_revenue_pie_graph(self, revenue_data: list) -> str:
+        """
+        Generates a pie chart based on revenue data. The chart shows revenue by user.
+        :param revenue_data: the revenue data used to generate the graph
+        :return encoded_graph: the graph encoded as a string
+        """
+        df = pd.DataFrame(revenue_data)
+        plt.style.use('dark_background')
+
+        if 'user' not in df.columns or 'net_revenue' not in df.columns:
+            raise ValueError("Data must contain 'user' and 'net_revenue' fields")
+
+        revenue_by_user = df.groupby('user')['net_revenue'].sum().sort_values(ascending=False)
+        revenue_by_user = revenue_by_user[revenue_by_user > 0]
+
+        explode = [0.1] + [0 for _ in range(len(revenue_by_user) - 1)]
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.pie(revenue_by_user, labels=revenue_by_user.index, autopct='%1.1f%%',
+            startangle=90, shadow=True, explode=explode)
+        ax.set_title('Net Revenue by User')
+
+        plt.tight_layout()
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100)
+        buffer.seek(0)
+
+        encoded_image = base64.b64encode(buffer.read()).decode('utf-8')
+        plt.close(fig)
+
+        return encoded_image
+
+    def generate_sales_graph(self, sales_data: list) -> str:
         """
         Generates a graph based on sales data.
         :param sales_data: the sales data used to generate the graph

@@ -9,7 +9,8 @@ async function populateRevenue(){
     */
     // Get element containers
     const insightsPanel = document.getElementById("insights-panel");
-    const chartContainer = document.getElementById("chart-container");
+    const barChartContainer = document.getElementById("bar-chart-container");
+    const pieChartContainer = document.getElementById("pie-chart-container");
     const incomeContainer = document.getElementById("income-container");
     const revenueData = await getRevenueData();
     insightsPanel.innerText = revenueData.data.insight;
@@ -24,11 +25,16 @@ async function populateRevenue(){
     });
     incomeContainer.innerHTML = incomeNotes;
 
-    var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${revenueData.data.chart}`)
-    chart.width = 650;
-    chart.height = 325;
-    chartContainer.appendChild(chart);
+    var barChart = new Image();
+    barChart.setAttribute('src', `data:image/jpg;base64,${revenueData.data.bar_chart}`)
+    barChart.width = 600;
+    barChart.height = 300;
+    barChartContainer.appendChild(barChart);
+    var pieChart = new Image();
+    pieChart.setAttribute('src', `data:image/jpg;base64,${revenueData.data.pie_chart}`)
+    pieChart.width = 600;
+    pieChart.height = 300;
+    pieChartContainer.appendChild(pieChart);
 }
 
 async function getRevenueData() {

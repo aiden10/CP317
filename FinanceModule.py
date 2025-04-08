@@ -372,4 +372,4 @@ class FinanceModule:
         return notes
     
     def get_revenue(self, email: str) -> list:
-        return self.db_handler.fetch(Revenue, {"user": email})
+        return self.db_handler.fetch_table(Revenue)
