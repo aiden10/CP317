@@ -67,7 +67,7 @@ class DatabaseHandler:
             self.logger.write_log(f"Error dropping table {model.__tablename__}: {str(e)}")
             raise e
 
-    def contains(self, table, condition) -> bool:
+    def contains(self, table, condition: dict) -> bool:
         """
         Checks if at least one record matches the given condition  
 
@@ -130,7 +130,7 @@ class DatabaseHandler:
             self.logger.write_log(f"Delete failed: {e}")
         return deleted
 
-    def update(self, table, condition, updates) -> bool:
+    def update(self, table, condition: dict, updates: dict) -> bool:
         """ 
         Updates first record matching the condition with new values
         
@@ -157,7 +157,7 @@ class DatabaseHandler:
             self.logger.write_log(f"Update failed: {e}")
             return False
 
-    def fetch(self, table, condition) -> dict:
+    def fetch(self, table, condition: dict) -> dict:
         """
         Returns the rows matching the condition
 

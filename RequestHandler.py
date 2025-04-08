@@ -25,7 +25,6 @@ class RequestHandler:
     def __init__(self):
         self.auth_handler = AuthenticationHandler()
         self.dashboard = DashboardSummarizer()
-        self.finance = FinanceModule() # For handling sales and revenue
         self.employees = EmployeeManagement()
         self.inventory = InventoryManagement()
         self.reports = ReportGenerator()
@@ -131,7 +130,8 @@ class RequestHandler:
         if self.auth_handler.is_valid_user(session_token):
             item_name = request_body["item_name"]
             quantity = request_body["quantity"]
-            order = self.inventory.order_inventory(item_name, quantity)
+            category = request_body["category"]
+            order = self.inventory.order_inventory(item_name, quantity, category)
 
             return {"status_code": 200, "message": "Successfully submitted a order", "data": order}
         

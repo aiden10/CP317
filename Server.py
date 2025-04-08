@@ -79,6 +79,7 @@ def inventory_order():
     request_body = {
         "quantity": request.json.get("quantity"),
         "item_name": request.json.get("item_name"),
+        "category": request.json.get("category"),
         "session_token": request.cookies.get("session_token")
     }
 
