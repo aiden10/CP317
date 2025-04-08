@@ -93,30 +93,34 @@
     box-sizing: border-box;
 }
 
-.employee-head, .employee-list {
+.employee-head {
     position: fixed;
     left: 16vw;
     width: 30vw;
+    text-align: center;
+    color: white;
+    top: 12vh;
 }
 
-.employee-head {
+
+#employee-list {
+    position: fixed;
+    background-color: #eee;
+    left: 10vw;
+    border-radius: 25px;
+    padding: 15px;
+    height: 56.5vh;
     text-align: center;
     color: white;
     top: 25vh;
-}
-
-.employee-list {
-    position: fixed;
-    background-color: #eee;
-    top: 40vh;
-    left: 16vw;
-    border-radius: 25px;
-    padding: 15px;
-    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    overflow-y: auto;
 }
 
 .employee-button {
-  width: 100%;
+  width: auto;
   padding: 10px;
   margin: 8px 0;
   font-size: 16px;
@@ -172,6 +176,7 @@
   border-collapse: collapse;
   margin-bottom: 20px;
   width: 80%;
+  min-height: 25.5vh;
 }
 .info-table td {
   border: 1px solid #999;

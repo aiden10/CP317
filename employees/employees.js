@@ -1,4 +1,12 @@
 
+// place-holder employee info
+var employees = [
+    { name: "Alice Smith", pay: "$22.25", hours: "35h", position: "Bakery Manager" },
+    { name: "Bob Johnson", pay: "$18.50", hours: "30h", position: "Cashier" },
+    { name: "Charlie Brown", pay: "$25.00", hours: "40h", position: "Head Chef" },
+    { name: "Diana Prince", pay: "$20.00", hours: "28h", position: "Barista" },
+    { name: "Edward Blake", pay: "$19.75", hours: "32h", position: "Stock Clerk" },
+  ];
 
 // Call populateEmployees function when page loads
 document.addEventListener('DOMContentLoaded', populateEmployees);
@@ -8,27 +16,20 @@ async function populateEmployees(){
     Called when the page loads. Retrieves the employees data and populates the containers to display the retrieved data.
     */
     // Get element containers
-    const insightsPanel = document.getElementById("insights-panel");
-    const chartContainer = document.getElementById("chart-container");
-    const incomeContainer = document.getElementById("income-container");
+    const employeesList = document.getElementById("employee-list");
     const employeesData = await getEmployeesData();
-    insightsPanel.innerText = employeesData.data.insight;
-    var incomeNotes = "";
-    employeesData.data.income_notes.forEach(note => {
-        incomeNotes += `
-        <div class="income-panel">
-            <span>
-                ${note}
-            </span>
-        </div>`
+    employees = employeesData.data;
+    var employeeButtons = "";
+    var i = 0;
+    employeesData.data.forEach(employee => {
+        employeeButtons += `
+        <button class="employee-button" onclick=\"selectEmployee(${i})\">
+            ${employee.first_name + " " + employee.last_name}
+        </button>
+        `
+        i++;
     });
-    incomeContainer.innerHTML = incomeNotes;
-
-    var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${employeesData.data.chart}`)
-    chart.width = 1000;
-    chart.height = 325;
-    chartContainer.appendChild(chart);
+    employeesList.innerHTML = employeeButtons;
 }
 
 async function getEmployeesData() {
@@ -48,7 +49,7 @@ async function getEmployeesData() {
         if (json.status_code === 401){
             window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the employees. 
             return;
-        } 
+        }
         return json;
 
     } catch (error) {
@@ -88,15 +89,6 @@ function logout() {
     });
 }
 
-// place-holder employee info
-const employees = [
-    { name: "Alice Smith", pay: "$22.25", hours: "35h", position: "Bakery Manager" },
-    { name: "Bob Johnson", pay: "$18.50", hours: "30h", position: "Cashier" },
-    { name: "Charlie Brown", pay: "$25.00", hours: "40h", position: "Head Chef" },
-    { name: "Diana Prince", pay: "$20.00", hours: "28h", position: "Barista" },
-    { name: "Edward Blake", pay: "$19.75", hours: "32h", position: "Stock Clerk" },
-  ];
-
   function selectEmployee(index) {
     const emp = employees[index];
 
@@ -104,9 +96,9 @@ const employees = [
     document.getElementById("placeholder-message").style.display = "none";
     document.getElementById("employee-details").style.display = "flex";
 
-    document.getElementById("employee-name").textContent = emp.name;
+    document.getElementById("employee-name").textContent = emp.first_name + " " + emp.last_name;
     document.getElementById("pay").textContent = emp.pay;
-    document.getElementById("hours").textContent = emp.hours;
+    document.getElementById("hours").textContent = emp.weekly_hours;
     document.getElementById("position").textContent = emp.position;
   }
 
