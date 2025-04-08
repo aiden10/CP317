@@ -1,9 +1,17 @@
-def test_full_user_workflow():
+import pytest
+from Server import Server
+
+@pytest.fixture
+def server():
+    return Server()
+
+
+def test_full_user_workflow(server):
     # Register User
     registration_body = {"email": "workflowuser@example.com", "password": "password123", "privilege": "employee"}
     registration_response = server.request_handler.request_registration(registration_body)
     assert registration_response["status_code"] == 200
-    
+    print("Successfuly in test_end_to_end.py")
     session_token = registration_response["session_token"]
     
     # Log in User
