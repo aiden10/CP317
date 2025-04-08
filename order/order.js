@@ -5,16 +5,13 @@ document.addEventListener('DOMContentLoaded', populateOrders);
 
 async function populateOrders(){
     /*
-    Called when the page loads. Retrieves the sales data and populates the containers to display the retrieved data.
+    Called when the page loads. Retrieves the order data and populates the containers to display the retrieved data.
     */
     // Get element containers
-    const insightsPanel = document.getElementById("insights-panel");
-    const chartContainer = document.getElementById("chart-container");
-    const incomeContainer = document.getElementById("income-container");
-    const salesData = await getsalesData();
-    insightsPanel.innerText = salesData.data.insight;
+    const orderData = await getOrderData();
+    insightsPanel.innerText = orderData.data.insight;
     var incomeNotes = "";
-    salesData.data.income_notes.forEach(note => {
+    orderData.data.income_notes.forEach(note => {
         incomeNotes += `
         <div class="income-panel">
             <span>
@@ -23,30 +20,24 @@ async function populateOrders(){
         </div>`
     });
     incomeContainer.innerHTML = incomeNotes;
-
-    var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${salesData.data.chart}`)
-    chart.width = 1000;
-    chart.height = 500;
-    chartContainer.appendChild(chart);
 }
 
-async function getsalesData() {
+async function getOrderData() {
     /*
-    Retrieves the sales data and redirects unauthorized users.
+    Retrieves the order data and redirects unauthorized users.
     */
 
     try {
-        const response = await fetch("http://localhost:8000/sales", {
+        const response = await fetch("http://localhost:8000/order", {
             credentials: 'include'
         });
         if (!response.ok) {
-            alert("Failed to retrieve sales data");
+            alert("Failed to retrieve order data");
             return;
         }
         const json = await response.json();
         if (json.status_code === 401){
-            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the sales. 
+            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the order. 
             return;
         } 
         return json;
