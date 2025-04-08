@@ -41,27 +41,41 @@
             <a href = "index.html">Order</a>
         </div>
     </div>
-    <div id="insights-panel">
-        loading...
-    </div>
-    <div id="chart-container">
-    </div>
-    <div id="income-container">
-        <div class="income-panel">
-            <span>loading...</span>
+    <div id="order-container">
+        <div class="filter-bar">
+            <input type="text" placeholder="Search by Order ID or Product Name">
         </div>
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-        <div class="income-panel">
-            <span>loading...</span>
-        </div>
-    </div>
+        <table id="order-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1001</td>
+                    <td>John Doe</td>
+                    <td>Apples</td>
+                    <td>20</td>
+                    <td>
+                        <button class="order-btn">Order</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#1002</td>
+                    <td>Jane Smith</td>
+                    <td>Milk</td>
+                    <td>10</td>
+                    <td>
+                        <button class="order-btn">Order</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
 </body>
 </html>
