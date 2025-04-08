@@ -25,7 +25,7 @@ function registerUser(email, password, privilege) {
     */
     const messageLabel = document.getElementById("message-label");
 
-    fetch("http://localhost:8000/register", { // [CHANGE] update this to the port the server will be hosted on, or the actual address if we host the backend online
+    fetch("http://localhost:8000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, privilege })

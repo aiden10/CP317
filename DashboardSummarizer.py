@@ -12,14 +12,12 @@ Called From:
 # from reportlab.lib.pagesizes import letter
 # from reportlab.pdfgen import canvas
 from FinanceModule import FinanceModule
-from AssetManagement import AssetManagement
 from datetime import datetime
 from Logger import Logger
 import base64
 
 class DashboardSummarizer:
     def __init__(self):
-        self.assets = AssetManagement()
         self.finances = FinanceModule()
         self.logger = Logger("DashboardSummary")
 

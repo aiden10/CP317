@@ -1,4 +1,5 @@
 
+var inventoryData = [];
 
 // Call populateOrders function when page loads
 document.addEventListener('DOMContentLoaded', populateOrders);
@@ -8,36 +9,42 @@ async function populateOrders(){
     Called when the page loads. Retrieves the sales data and populates the containers to display the retrieved data.
     */
     // Get element containers
-    const insightsPanel = document.getElementById("insights-panel");
-    const chartContainer = document.getElementById("chart-container");
-    const incomeContainer = document.getElementById("income-container");
-    const salesData = await getsalesData();
-    insightsPanel.innerText = salesData.data.insight;
-    var incomeNotes = "";
-    salesData.data.income_notes.forEach(note => {
-        incomeNotes += `
-        <div class="income-panel">
-            <span>
-                ${note}
-            </span>
-        </div>`
+    const orderTable = document.getElementById("order-table");
+    inventoryData = await getInventoryData();
+    inventoryData.data.forEach((item, i) => {
+        var row = document.createElement("tr");
+        var category = document.createElement("td");
+        category.innerText = item.category;
+        var price = document.createElement("td");
+        price.innerText = item.price;
+        var name = document.createElement("td");
+        name.innerText = item.item_name;
+        var quantity = document.createElement("td");
+        quantity.innerText = item.quantity;
+        var order = document.createElement("td");
+        var orderButton = document.createElement("button");
+        orderButton.addEventListener('click', function() {
+            placeOrder(i);
+        });
+        orderButton.innerText = "Order"
+        orderButton.className = "order-btn";
+        order.appendChild(orderButton);
+        row.appendChild(name);
+        row.appendChild(category);
+        row.appendChild(price);
+        row.appendChild(quantity);
+        row.appendChild(order);
+        orderTable.appendChild(row);
     });
-    incomeContainer.innerHTML = incomeNotes;
-
-    var chart = new Image();
-    chart.setAttribute('src', `data:image/jpg;base64,${salesData.data.chart}`)
-    chart.width = 1000;
-    chart.height = 500;
-    chartContainer.appendChild(chart);
 }
 
-async function getsalesData() {
+async function getInventoryData() {
     /*
-    Retrieves the sales data and redirects unauthorized users.
+    Retrieves the inventory data and redirects unauthorized users.
     */
 
     try {
-        const response = await fetch("http://localhost:8000/sales", {
+        const response = await fetch("http://localhost:8000/inventory", {
             credentials: 'include'
         });
         if (!response.ok) {
@@ -46,7 +53,7 @@ async function getsalesData() {
         }
         const json = await response.json();
         if (json.status_code === 401){
-            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the sales. 
+            window.location.href = "../login/index.html"; // Redirect to login page if they don't have access to view the inventory. 
             return;
         } 
         return json;
@@ -54,6 +61,29 @@ async function getsalesData() {
     } catch (error) {
         console.error(error);
     }
+}
+
+function placeOrder(index){
+    // index is the item's index in inventoryData
+    var item = inventoryData.data[index];
+    fetch("http://localhost:8000/inventory/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ "item_name": item.item_name, "category": item.category, "quantity": 1 }),
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status_code === 200) {
+            alert(`Successfully placed order for 1 ${item.item_name}`);
+        } else {
+            alert("Failed to place order: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error(`Error: ${error}`);
+        alert(`Error: ${error}`);
+    });    
 }
 
 function showLeftPanel(){
@@ -87,3 +117,4 @@ function logout() {
         console.error("Error during logout:", error);
     });
 }
+

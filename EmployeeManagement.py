@@ -70,20 +70,3 @@ class EmployeeManagement:
             return result["pay"] * result["weekly_hours"]
         return 0.0
         
-
-    def get_employee_hours(self) -> list:
-        
-        results = self.db_handler.fetch_table(Employees)
-        if results:
-            return [
-                {
-                    "employee_id": emp["employee_id"],
-                    "first_name": emp["first_name"],
-                    "last_name": emp["last_name"],
-                    "weekly_hours": emp["weekly_hours"]
-                    
-                    
-                }
-                for emp in results
-            ]
-        return []           
