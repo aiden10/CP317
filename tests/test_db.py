@@ -104,18 +104,76 @@ def test_delete(db_handler):
     assert len(result) == 0, "Data was not deleted from 'sales' table"
     print("Data deleted from 'sales' table successfully")
 
-def test_update():
+def test_clear_table(db_handler):
+    # Insert records into the 'sales' table
+    db_handler.insert('sales', {'item': 'Peach', 'quantity': 20, 'price': 3.00})
+    db_handler.insert('sales', {'item': 'Pineapple', 'quantity': 30, 'price': 2.50})
 
-    return 
+    # Clear all records from the 'sales' table
+    db_handler.clear_table('sales')
 
-def test_fetch():
+    # Fetch the records to verify the table is empty
+    result = db_handler.fetch('sales', {})
+    
+    assert len(result) == 0, "Records were not cleared from 'sales' table"
+    print("All records cleared from 'sales' table successfully")
 
-    return 
+def test_update(db_handler):
+    # Insert a record into the 'sales' table for updating
+    db_handler.insert('sales', {'item': 'Mango', 'quantity': 80, 'price': 1.25})
 
-def test_fetch_table():
+    # Update the record
+    db_handler.update('sales', {'item': 'Mango'}, {'price': 1.50, 'quantity': 100})
 
-    return
+    # Fetch the updated data to verify the change
+    result = db_handler.fetch('sales', {'item': 'Mango'})
+    
+    assert result[0]['price'] == 1.50, "Price update failed"
+    assert result[0]['quantity'] == 100, "Quantity update failed"
+    print("Data updated successfully in 'sales' table")
 
-def test_retrieve_data():
+def test_fetch(db_handler):
+    # Insert a record into the 'sales' table for fetching
+    db_handler.insert('sales', {'item': 'Apple', 'quantity': 100, 'price': 1.50})
 
-    return 
+    # Fetch the inserted data based on item name
+    result = db_handler.fetch('sales', {'item': 'Apple'})
+    
+    # Verify the fetched data matches the inserted data
+    assert len(result) > 0, "No data returned for 'Apple'"
+    assert result[0]['item'] == 'Apple', "Fetched item does not match"
+    assert result[0]['quantity'] == 100, "Fetched quantity does not match"
+    assert result[0]['price'] == 1.50, "Fetched price does not match"
+    
+    print("Data fetched correctly for 'Apple' in 'sales' table")
+def test_fetch_table(db_handler):
+    # Insert multiple records into the 'sales' table for fetching all data
+    db_handler.insert('sales', {'item': 'Apple', 'quantity': 100, 'price': 1.50})
+    db_handler.insert('sales', {'item': 'Banana', 'quantity': 150, 'price': 0.75})
+
+    # Fetch all records from the 'sales' table
+    result = db_handler.fetch_table('sales')
+    
+    # Verify the fetched data contains the inserted records
+    assert len(result) > 1, "No data returned from 'sales' table"
+    assert any(record['item'] == 'Apple' for record in result), "'Apple' not found in fetched data"
+    assert any(record['item'] == 'Banana' for record in result), "'Banana' not found in fetched data"
+    
+    print("Data fetched correctly from 'sales' table")
+
+
+def test_retrieve_data(db_handler):
+    # Insert multiple records into the 'sales' table
+    db_handler.insert('sales', {'item': 'Apple', 'quantity': 100, 'price': 1.50})
+    db_handler.insert('sales', {'item': 'Banana', 'quantity': 150, 'price': 0.75})
+
+    # Retrieve data for a specific item, such as 'Apple'
+    result = db_handler.retrieve_data('sales', {'item': 'Apple'})
+    
+    # Verify the retrieved data matches the conditions
+    assert len(result) == 1, "Expected only 1 record for 'Apple'"
+    assert result[0]['item'] == 'Apple', "Retrieved item does not match"
+    assert result[0]['quantity'] == 100, "Retrieved quantity does not match"
+    assert result[0]['price'] == 1.50, "Retrieved price does not match"
+    
+    print("Specific data retrieved correctly for 'Apple' from 'sales' table")
