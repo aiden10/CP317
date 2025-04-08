@@ -93,7 +93,7 @@
     box-sizing: border-box;
 }
 
-.address-dropdown, .employee-head, .employee-list {
+.employee-head, .employee-list {
     position: fixed;
     left: 16vw;
     width: 30vw;
@@ -103,29 +103,6 @@
     text-align: center;
     color: white;
     top: 25vh;
-}
-
-.address-dropdown {
-    top: 15vh;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-.address-dropdown::before {
-  margin-right: 10px;
-  font-size: 20px;
-  color: white;
-}
-.address-dropdown select {
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  background-color: white;
-  color: black;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .employee-list {
