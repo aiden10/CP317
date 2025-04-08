@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', populateOrders);
 
 async function populateOrders(){
     /*
-    Called when the page loads. Retrieves the sales data and populates the containers to display the retrieved data.
+    Called when the page loads. Retrieves the order data and populates the containers to display the retrieved data.
     */
     // Get element containers
     const orderTable = document.getElementById("order-table");
@@ -48,7 +48,7 @@ async function getInventoryData() {
             credentials: 'include'
         });
         if (!response.ok) {
-            alert("Failed to retrieve sales data");
+            alert("Failed to retrieve order data");
             return;
         }
         const json = await response.json();
